@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.button-left {
+	align-items: flex-start !important;
+	justify-content: flex-start !important;
+}
+
