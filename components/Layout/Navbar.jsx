@@ -1,56 +1,99 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { Button, Container, IconButton } from "@material-ui/core";
-import { Menu } from "@material-ui/icons";
-
+import { Close, Menu } from "@material-ui/icons";
 
 import { MenuBars, Files, Add, IdCard, USFlag, Logout } from "../icons";
+import { Transition } from "@headlessui/react";
+
+const navLink = [
+  {
+    text: "Home",
+    link: "/",
+    id: "1",
+    active: "true",
+  },
+  {
+    text: "My files",
+    link: "/myfiles",
+    id: "2",
+    active: "true",
+  },
+];
 
 const Navbar = () => {
-  const [show, setShow] = useState(false)
-  const menu = (
-    <div style={{width: '10rem'}} className="absolute text-left z-20 bg-white py-2 right-0 border border-gray-200 rounded-sm -mt-1">
-      <Link href="/">
-        <Button startIcon={<Files/>} className="w-full button-left">Manage files</Button>
-      </Link>
-      <Link href="/">
-        <Button startIcon={<Add/>} className="w-full button-left">Add files</Button>
-      </Link>
-      <Link href="/">
-        <Button startIcon={<IdCard/>} className="w-full button-left">Profile</Button>
-      </Link>
-      <Link href="/">
-        <Button startIcon={<Logout/>} className="w-full button-left">Logout</Button>
-      </Link>
-    </div>
-  )
+  const [isOpen, setIsOpen] = useState(false);
   return (
-    <header className="bg-blue-500"><Container>
-      <div className="h-14 flex items-center justify-between">
-        <div className="flex-1 flex">
-          <Link href="/">
-            <a>
-              <h1 className="text-white text-lg font-bold">
-                Code Sharing Application
-              </h1>
-            </a>
-          </Link>
+    <nav className="bg-gray-800">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16">
+          <div className="flex items-center">
+            <div className="flex-shrink-0">
+              <Link href="/">
+                <a href="/" style={{ color: "white", fontWeight: "bold" }}>
+                  Code sharing
+                </a>
+              </Link>
+            </div>
+            <div className="hidden md:block">
+              <div className="ml-10 flex items-baseline space-x-4">
+                {navLink.map((link) => (
+                  <Link
+                    className="hover:bg-gray-700 text-white px-3 py-2 rounded-md text-sm font-medium"
+                    href={link.link}
+                    key={link.id}
+                  ><a href={link.link}>
+                    {link.name}></a>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
+          <div className="-mr-2 flex md:hidden">
+            <IconButton
+              onClick={() => setIsOpen(!isOpen)}
+              type="button"
+              className="bg-gray-900 inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
+              aria-controls="mobile-menu"
+              aria-expanded="false"
+            >
+              <span className="sr-only">Open main menu</span>
+              {!isOpen ? <Menu /> : <Close />}
+            </IconButton>
+          </div>
         </div>
-        <div className="relative">
-          <Link href="/login">
-            <a className="mx-2 text-white font-bold" href="/login">Login</a>
-          </Link>
-          <Link href="/login">
-            <a className="mx-2 text-white font-bold" href="/register">Register</a>
-          </Link>
-          <IconButton onClick={()=>setShow(!show)}>
-            <Menu className="text-white"/>
-          </IconButton>
-          {show && menu}
-        </div>
-      </div></Container>
-    </header>
+      </div>
+
+      <Transition
+        show={isOpen}
+        enter="transition ease-out duration-100 transform"
+        enterFrom="opacity-0 scale-95"
+        enterTo="opacity-100 scale-100"
+        leave="transition ease-in duration-75 transform"
+        leaveFrom="opacity-100 scale-100"
+        leaveTo="opacity-0 scale-95"
+      >
+        {(ref) => (
+          <div className="md:hidden" id="mobile-menu">
+            <div ref={ref} className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+              <a
+                href="#"
+                className="hover:bg-gray-700 text-white block px-3 py-2 rounded-md text-base font-medium"
+              >
+                Home
+              </a>
+
+              <a
+                href="#"
+                className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+              >
+                My files
+              </a>
+            </div>
+          </div>
+        )}
+      </Transition>
+    </nav>
   );
 };
-
 export default Navbar;

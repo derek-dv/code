@@ -1,45 +1,64 @@
-import Link from "next/link"
-import Image from "next/image"
-import {Container, Button, Input, Card, IconButton} from "@material-ui/core"
-import {MoreVerticon} from "@mui/icons-material"
-// import {Add} from "@material-ui/icons"
+import Link from "next/link";
+import { Container, Button, Input, Card, IconButton } from "@material-ui/core";
+import { Add, MoreVert } from "@material-ui/icons";
 
-import Heading from "../components/UI/Heading"
+import Heading from "../components/UI/Heading";
+
+import { files } from "../dummy";
+
 const Files = () => {
-	return (
-		<Container className="">
-			<Heading className="mt-2" type="sectionHeading">My Files</Heading>
-			<Input className="w-48 mb-2" placeholder="Search" />
-			<div>
-				<Button style={{
-					backgroundColor: "#ebe9e4",
-					marginBottom: "1rem"
-				}} startIcon={<Add/>}
-				>
-					Blank editor
-				</Button>
-			</div>
-			<div className="flex">
-				<Link href="/"><a href="/">
-				<Card style={{
-					width: "10rem",
-					height: "12rem"
-				}}>
-					<img style={{
-						maxWidth: "10rem",
-						minHeight: "10rem"
-					}} src="/code.png"/>
-					
-					<div className="flex justify-between items center">
-						<p className="text-sm text-gray-800">ml-ops.py</p>
-						<IconButton><MoreVerticon/></IconButton>
-					</div>
-				</Card>
-				</a><
-				/Link>
-			</div>
-		</Container>
-	)
-}
+  return (
+    <Container className="">
+      <div className="sm:w-full sm:text-center">
+        <Heading className="mt-4" type="sectionHeading">
+          My Files
+        </Heading>
+        <Input className="w-48 mb-2" placeholder="Search" />
+        <div className="">
+          <Button
+            style={{
+              backgroundColor: "#ebe9e4",
+              marginBottom: "1rem",
+            }}
+            startIcon={<Add />}
+          >
+            Blank editor
+          </Button>
+        </div>
+      </div>
+      <div className="flex gap-4 flex-wrap sm:justify-center">
+        {files.map((file) => (
+          <Card
+            style={{
+              width: "15rem",
+              height: "19rem",
+            }}
+          >
+            <Link href="/">
+              <a href={`file/${file.id}`}>
+                <img
+                  style={{
+                    maxWidth: "15rem",
+                    minHeight: "17rem",
+                  }}
+                  src="/code2.jpg"
+                />
+              </a>
+            </Link>
 
-export default Files
+            <div className="mx-2 flex justify-between items center">
+              <p className="h-full my-auto text-sm font-bold text-gray-800">
+                {file.name}
+              </p>
+              <IconButton size="small" onClick={() => alert("clicked")}>
+                <MoreVert size="small" />
+              </IconButton>
+            </div>
+          </Card>
+        ))}
+      </div>
+    </Container>
+  );
+};
+
+export default Files;

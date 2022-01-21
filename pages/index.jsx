@@ -23,7 +23,7 @@ const Home = () => {
     {
       id: "manage-files",
       text: "Manage Files",
-      link: "/files_list",
+      link: "/myfiles",
       colorClasses: "bg-green-500 hover:bg-green-600 border-green-600 ",
       textClasses: "text-white",
       onClick: () => {},
