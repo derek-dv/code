@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Container, Button, Input, Card, IconButton } from "@material-ui/core";
+import { MenuItems, Container, Button, Input, Card, IconButton } from "@material-ui/core";
 import { Add, MoreVert } from "@material-ui/icons";
 
 import Heading from "../components/UI/Heading";
@@ -7,9 +7,10 @@ import Heading from "../components/UI/Heading";
 import { files } from "../dummy";
 
 const Files = () => {
+  
   return (
     <Container className="">
-      <div className="sm:w-full sm:text-center">
+      <div className="">
         <Heading className="mt-4" type="sectionHeading">
           My Files
         </Heading>
@@ -26,7 +27,7 @@ const Files = () => {
           </Button>
         </div>
       </div>
-      <div className="flex gap-4 flex-wrap sm:justify-center">
+      <div className="flex gap-4 flex-wrap">
         {files.map((file) => (
           <Card
             style={{
@@ -34,8 +35,8 @@ const Files = () => {
               height: "19rem",
             }}
           >
-            <Link href="/">
-              <a href={`file/${file.id}`}>
+            <Link href={`file/${file.id}`}>
+              <a>
                 <img
                   style={{
                     maxWidth: "15rem",

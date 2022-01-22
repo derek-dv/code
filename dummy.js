@@ -24,7 +24,7 @@ export const files = [
     {
         id: 3,
         name: "default.css",
-        language: "css",
+        language: "CSS",
         code: `@tailwind base;
         @tailwind components;
         @tailwind utilities;
