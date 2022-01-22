@@ -9,25 +9,26 @@ import {files} from "../../dummy"
 import Editor from "@monaco-editor/react"
 
 const NewFile = () => {
-  const [post, setPost] = useState();
+  const [post, setPost] = useState(`import Link from "next/link";
+        import Image from "next/image";
+        import { Container, Button, Input, Card, IconButton } from "@material-ui/core";
+        import { MoreVerticon } from "@mui/icons-material";
+        import { Add } from "@material-ui/icons";
+        
+        import Heading from "../components/UI/Heading";
+        const Files = () => {}}`);
   const [language, setLanguage] = useState("javascript")
-  const {query} = useRouter()
-  const id = query?.fileId
-  const file = files.filter((file)=>file.id == id)[0]
-  useEffect(()=>{
-    console.log(file)
-    setPost(file.code)
-  })
+  
   
   return (
     <>
       <Head>
-        <title>{file.name} | Code Sharing Application</title>
+        <title>script.js | Code Sharing Application</title>
       </Head>
       <Container>
         <div className="py-6">
           <Heading className="mb-6" type="sectionHeading">
-            {file.name}
+            {'script.js'}
           </Heading>
           <div className="mb-2">
             <Select
