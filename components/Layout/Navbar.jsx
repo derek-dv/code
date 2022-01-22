@@ -4,7 +4,7 @@ import {Menu, MenuItem, Button, Container, IconButton} from "@material-ui/core"
 import {AccountCircle} from "@material-ui/icons"
 
 function Navbar() {
-  const [menuOpen, setMenuOpen]=useState(true)
+  const [menuOpen, setMenuOpen]=useState(false)
   const menu = (
     <div className="z-20 absolute -text-white rounded w-44 flex flex-col m-0 p-0 bg-slate-500">
       <Link href="myfiles">
