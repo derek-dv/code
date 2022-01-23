@@ -50,9 +50,9 @@ const NewFile = () => {
               padding: "0.1rem 0.5rem",
               marginLeft: "0.5rem"
             }}>Save</Button>
-          </div>
+          </div><div className="flex flex-wrap gap-5">
           <Editor
-            width="60%"
+            width="100%"
             height="60vh"
             // defaultLanguage="javascript"
             language={"javascript"}
@@ -60,6 +60,16 @@ const NewFile = () => {
             value={post}
             onChange={(e)=>setPost(e.target.value)}
           />
+            <div className="">
+              <Button style={{
+                backgroundColor: "red",
+                marginRight: "2rem"
+              }}>Export to Google Drive</Button>
+              <Button style={{
+                backgroundColor: "blue"
+              }}>Export to Microsoft Drive</Button>
+            </div>
+          </div>
         </div>
       </Container>
     </>

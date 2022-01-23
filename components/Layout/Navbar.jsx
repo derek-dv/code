@@ -11,7 +11,7 @@ function Navbar() {
         <a className="w-full hover:bg-blue-400 p-2">
           My files
         </a></Link>
-      <Link href="/files">
+      <Link href="/file/new">
         <a className="w-full hover:bg-blue-400 p-2">
         Add files
       </a></Link>

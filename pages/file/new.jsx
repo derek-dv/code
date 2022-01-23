@@ -52,6 +52,15 @@ const NewFile = () => {
             value={post}
             onChange={setPost}
           />
+          <div className="mt-5">
+              <Button style={{
+                backgroundColor: "red",
+                marginRight: "2rem"
+              }}>Export to Google Drive</Button>
+              <Button style={{
+                backgroundColor: "blue"
+              }}>Export to Microsoft Drive</Button>
+            </div>
         </div>
       </Container>
     </>
