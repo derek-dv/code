@@ -39,8 +39,8 @@ const Login = () => {
 				</Paper>
 				<p className="mt-2 text-sm text-gray-500 text-left">
             Don't have an account?{"  "}
-          <Link className="text-blue-400 underline" href="/signup">
-            Signup Here
+          <Link href="/signup">
+            <a className="text-blue-400 underline">Signup</a>
           </Link>
         </p>
 			</div>

@@ -23,12 +23,12 @@ export default function Home() {
           <div className="mt-2 flex flex-wrap gap-2">
             <Button style={buttonStyle}>
               <Link href="/file/new">
-                <a>Get started</a>
+                <a className="text-white">Get started</a>
               </Link>
             </Button>
             <Button style={buttonStyle}>
               <Link href="/signup">
-                <a>Register with us</a>
+                <a className="text-white">Register with us</a>
               </Link>
             </Button>
           </div>

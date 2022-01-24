@@ -33,14 +33,14 @@ const Signup = () => {
 							<p className="text-red-500 text-sm">{errors?.password?.message}</p>
 							<Input name='confirmPassword' placeholder="Confirm Password" type="password" className="mt-2 py-2 w-full" />
 							<p className="text-red-500 text-sm mb-3"></p>
-							<Button style={{backgroundColor: 'blue'}} className="text-white text-bold" type="submit">Login</Button>
+							<Button style={{backgroundColor: 'blue'}} className="text-white text-bold" type="submit">Signup</Button>
 						</form>
 					</FormProvider>
 				</Paper>
 				<p className="mt-2 text-sm text-gray-500 text-left">
-            Don't have an account?{"  "}
-          <Link href="/signup">
-            <a className="text-blue-400 underline">Signup Here</a>
+            Already have an account?{"  "}
+          <Link href="/login">
+            <a className="text-blue-400 underline">Login Here</a>
           </Link>
         </p>
 			</div>

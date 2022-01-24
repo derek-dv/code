@@ -55,7 +55,7 @@ const NewFile = () => {
             width="100%"
             height="60vh"
             // defaultLanguage="javascript"
-            language={"javascript"}
+            language={language}
             theme="vs-dark"
             value={post}
             onChange={(e)=>setPost(e.target.value)}
