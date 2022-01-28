@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 import NotificationItem from "./item";
 
 const Notifications = () => {
-  const notifications = []/*useSelector(
+  const notifications = []; /*useSelector(
     (state) => state.notification.notifications
   );*/
 

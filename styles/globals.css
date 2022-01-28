@@ -3,11 +3,11 @@
 @tailwind utilities;
 
 .button-left {
-	align-items: flex-start !important;
-	justify-content: flex-start !important;
+  align-items: flex-start !important;
+  justify-content: flex-start !important;
 }
 
 .layout {
-	display: grid;
-	grid-template-rows: auto 1fr auto;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
 }

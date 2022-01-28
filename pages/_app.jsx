@@ -6,21 +6,23 @@ import Layout from "../components/Layout";
 
 //
 import "../styles/globals.css";
-// import store from "../store/index";
 
 function MyApp({ Component, pageProps }) {
-  return (<>
+  return (
+    <>
       <Head>
         <title>Code sharing application</title>
         <meta
           name="description"
-          content="We are the best code sharing application"/>
+          content="We are the best code sharing application"
+        />
       </Head>
       <div id="backdrop-bottom-placeholder"></div>
       <div id="notifications-placeholder"></div>
       <Layout>
         <Component {...pageProps} />
-      </Layout></>
+      </Layout>
+    </>
   );
 }
 

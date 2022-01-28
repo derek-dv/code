@@ -1,13 +1,42 @@
 import Link from "next/link";
-import { MenuItems, Container, Button, Input, Card, IconButton } from "@material-ui/core";
+import { useRouter } from "next/router";
+import axios from "axios";
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  MenuItems,
+  Container,
+  Button,
+  Input,
+  Card,
+  IconButton,
+} from "@material-ui/core";
 import { Add, MoreVert } from "@material-ui/icons";
 
 import Heading from "../components/UI/Heading";
+import { getFiles } from "../store/actions/files";
 
-import { files } from "../dummy";
+// import { files } from "../dummy";
 
 const Files = () => {
-  
+  const router = useRouter();
+  const [files, setFiles] = useState([]);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    setLoading(true);
+    axios
+      .get("/api/files")
+      .then((res) => {
+        const ser = res.data.files;
+        setLoading(false);
+        console.log(ser);
+        setFiles(ser);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
   return (
     <Container className="">
       <div className="">
@@ -22,41 +51,46 @@ const Files = () => {
               marginBottom: "1rem",
             }}
             startIcon={<Add />}
+            onClick={() => router.push("/file/new")}
           >
             Blank editor
           </Button>
         </div>
       </div>
       <div className="flex gap-4 flex-wrap">
-        {files.map((file) => (
-          <Card
-            style={{
-              width: "15rem",
-              height: "19rem",
-            }}
-          >
-            <Link href={`file/${file.id}`}>
-              <a>
-                <img
-                  style={{
-                    maxWidth: "15rem",
-                    minHeight: "17rem",
-                  }}
-                  src="/code2.jpg"
-                />
-              </a>
-            </Link>
+        {loading ? (
+          <p>Loading</p>
+        ) : (
+          files.map((file) => (
+            <Card
+              style={{
+                width: "15rem",
+                height: "19rem",
+              }}
+            >
+              <Link href={`file/${file._id}`}>
+                <a>
+                  <img
+                    style={{
+                      maxWidth: "15rem",
+                      minHeight: "17rem",
+                    }}
+                    src="/code2.jpg"
+                  />
+                </a>
+              </Link>
 
-            <div className="mx-2 flex justify-between items center">
-              <p className="h-full my-auto text-sm font-bold text-gray-800">
-                {file.name}
-              </p>
-              <IconButton size="small" onClick={() => alert("clicked")}>
-                <MoreVert size="small" />
-              </IconButton>
-            </div>
-          </Card>
-        ))}
+              <div className="mx-2 flex justify-between items center">
+                <p className="h-full my-auto text-sm font-bold text-gray-800">
+                  {file.fileName}
+                </p>
+                <IconButton size="small" onClick={() => alert("clicked")}>
+                  <MoreVert size="small" />
+                </IconButton>
+              </div>
+            </Card>
+          ))
+        )}
       </div>
     </Container>
   );
