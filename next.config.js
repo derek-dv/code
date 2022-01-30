@@ -4,7 +4,7 @@ module.exports = {
     ignoreDuringBuilds: true,
   },
   env: {
-    MONGO_URI: "mongodb://127.0.0.1/code_share",
+    MONGO_URI: "mongodb://localhost:27017/code",
     JWT_SECRET: "somedummytext",
   },
 };

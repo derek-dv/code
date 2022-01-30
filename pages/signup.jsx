@@ -3,80 +3,108 @@ import {
   TextField,
   FormControl,
   Paper,
-  Input,
   Button,
 } from "@material-ui/core";
 import Link from "next/link";
+import {useRouter} from "next/router"
+import { useState } from "react";
 import { useForm, FormProvider } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-
+import axios from "axios"
+import Alert from "../components/alert";
+import Input from "../components/formInput";
 import { signupSchema } from "../utils/schema/authSchema";
 
 const Signup = () => {
-  const form = useForm({
-    resolver: yupResolver(signupSchema),
-  });
-  const {
-    handleSubmit,
-    formState: { errors },
-  } = form;
+  const [errors, setErrors] = useState({});
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirm, setConfirm] = useState("");
+  const [signupError, setSignupError] = useState()
 
-  const submit = (e) => {
+  const router = useRouter()
+  const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(errors);
+
+    let error = {};
+
+    let isError = false;
+    if (username.length < 1) {
+      error.username = "Username is required";
+      isError = true;
+    }
+
+    if (email.length < 1) {
+      error.email = "Email is required";
+      isError = true;
+    }
+
+    if (password.length < 8) {
+      error.password = "Password length must be at least 8";
+      isError = true;
+    }
+
+    if (password !== confirm) {
+      error.confirm = "Passwords do not match";
+      isError = true;
+    }
+    setErrors(error)
+
+    if (!isError) {
+      const data = { username, email, password, confirmPassword: confirm }
+      axios
+        .post("/api/auth/signup", data)
+        .then((res) => {
+          console.log(res.data)
+          localStorage.setItem("user", res.data);
+          router.push("/login");
+        })
+        .catch((err) => {
+          if (err.response.data) setSignupError(err.response.data.error);
+        });
+    }
   };
   return (
     <Container>
       <div
         style={{ padding: "10rem 0" }}
         className="flex items-center justify-center flex-col"
-      >
+      >{signupError ? <Alert variant="error" text={signupError} /> : null}
         <Paper className="p-4 pt-0 w-full lg:w-96">
           <h2 className="text-xl font-bold">Sign Up</h2>
-          <FormProvider {...form}>
-            <form onSubmit={handleSubmit(submit)} autoComplete="off">
+            <form onSubmit={handleSubmit} autoComplete="off">
               <div className="w-full mt-2">
-                <FormControl fullWidth>
-                  <TextField
-                    name="username"
-                    variant="outlined"
-                    label="Username"
-                    type="text"
-                  />
-                </FormControl>
+                <Input
+                  label="Username"
+                  error={errors.username ? errors.username : null}
+                  setValue={setUsername}
+                />
               </div>
 
               <div className="w-full mt-2">
-                <FormControl fullWidth>
-                  <TextField
-                    name="email"
-                    variant="outlined"
-                    label="Email"
-                    type="email"
-                  />
-                </FormControl>
+                <Input
+                  label="Email"
+                  error={errors.email ? errors.email : null}
+                  setValue={setEmail}
+                />
               </div>
 
               <div className="w-full mt-2">
-                <FormControl fullWidth>
-                  <TextField
-                    name="password"
-                    variant="outlined"
-                    label="Password"
-                    type="password"
-                  />
-                </FormControl>
+                <Input
+                  type="password"
+                  label="Password"
+                  error={errors.password ? errors.password : null}
+                  setValue={setPassword}
+                />
               </div>
 
               <div className="w-full mt-2 mb-3">
-                <FormControl fullWidth>
-                  <TextField
-                    name="confirmPassword"
-                    variant="outlined"
-                    label="Confirm Password"
-                    type="password"
-                  />
-                </FormControl>
+                <Input
+                  type="password"
+                  label="Confirm Password"
+                  error={errors.confirm ? errors.confirm : null}
+                  setValue={setConfirm}
+                />
               </div>
 
               <Button
@@ -87,7 +115,6 @@ const Signup = () => {
                 Signup
               </Button>
             </form>
-          </FormProvider>
         </Paper>
         <p className="mt-2 text-sm text-gray-500 text-left">
           Already have an account?{"  "}

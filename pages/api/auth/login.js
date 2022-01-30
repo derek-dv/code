@@ -23,7 +23,7 @@ export default async function (req, res) {
         }
         res.status(401).json({ error: "Invalid email or password" });
       }
-      res.status(401).json({ error: "User does not exist" });
+      res.status(401).json({ error: "Invalid email or password" });
     default:
       res.status(403).send(`Method ${req.method} not allowed`);
   }
