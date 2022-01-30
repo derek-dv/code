@@ -14,8 +14,6 @@ import {
 import { Add, MoreVert } from "@material-ui/icons";
 
 import Heading from "../components/UI/Heading";
-import { getFiles } from "../store/actions/files";
-
 // import { files } from "../dummy";
 
 const Files = () => {
