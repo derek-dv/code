@@ -16,6 +16,7 @@ export default async function (req, res) {
         if (bcrypt.compareSync(req.body.password, user.password)) {
           res.status(200).json({
             user_id: user._id,
+            username: user.username,
             email: user.email,
             jwtToken: generateToken(user),
           });

@@ -8,7 +8,8 @@ export default async function (req, res) {
   switch (req.method) {
     case "POST":
       const { username, email, password, confirmPassword } = req.body;
-      const userExists = await User.exists({ email }) || await User.exists({ username });
+      const userExists =
+        (await User.exists({ email })) || (await User.exists({ username }));
 
       if (!userExists) {
         if (password === confirmPassword) {
@@ -29,7 +30,9 @@ export default async function (req, res) {
         return;
       }
 
-      res.status(401).json({ error: `User with email ${email} or username ${username} already exists` });
+      res.status(401).json({
+        error: `User with email ${email} or username ${username} already exists`,
+      });
 
     default:
       res.status(403).send("Method not allowed");

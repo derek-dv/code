@@ -4,10 +4,10 @@ import React from "react";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 
-const Layout = ({ children }) => {
+const Layout = ({ user, children }) => {
   return (
     <div className="h-screen layout">
-      <Navbar />
+      <Navbar user={user} />
       <main>{children}</main>
       <Footer />
     </div>

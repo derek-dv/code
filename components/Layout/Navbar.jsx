@@ -1,18 +1,45 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import {
-  Menu,
-  MenuItem,
-  Button,
-  Container,
-  IconButton,
-} from "@material-ui/core";
-import { AccountCircle } from "@material-ui/icons";
+import { MenuItem, Button, Container, IconButton } from "@material-ui/core";
+import { AccountCircle, Menu } from "@material-ui/icons";
 
-function Navbar() {
+function Navbar({ user }) {
   const [menuOpen, setMenuOpen] = useState(false);
-  const menu = (
+  // const [user, setUser] = useState()
+
+  // useEffect(()=>{
+  //   if(localStorage.getItem("user")) {
+  //     const userInfo = JSON.parse(localStorage.getItem("user"))
+  //     setUser(userInfo)
+  //   }
+  // }, [])
+
+  const guestMenu = (
     <div className="z-20 absolute -text-white rounded w-44 flex flex-col m-0 p-0 bg-slate-500">
+      <MenuItem>
+        <Link href="/file/public">
+          <a className="w-full p-2">Public files</a>
+        </Link>
+      </MenuItem>
+      <MenuItem>
+        <Link href="/myfiles">
+          <a className="w-full p-2">Files I added</a>
+        </Link>
+      </MenuItem>
+      <MenuItem>
+        <Link href="/file/new">
+          <a className="w-full p-2">Add file</a>
+        </Link>
+      </MenuItem>
+    </div>
+  )
+  const loggedInMenu = (
+    <div className="z-20 absolute -text-white rounded w-44 flex flex-col m-0 p-0 bg-slate-500">
+      <MenuItem>
+        <Link href="/file/public">
+          <a className="w-full p-2">Public files</a>
+        </Link>
+      </MenuItem>
       <MenuItem>
         <Link href="/myfiles">
           <a className="w-full p-2">My files</a>
@@ -28,11 +55,6 @@ function Navbar() {
           <a className="w-full p-2">Logout</a>
         </Link>
       </MenuItem>
-      <MenuItem>
-        <Link href="/">
-          <a className="w-full p-2">Languages</a>
-        </Link>
-      </MenuItem>
     </div>
   );
   return (
@@ -44,21 +66,36 @@ function Navbar() {
               <a className="font-bold">Code Sharing App</a>
             </Link>
           </div>
-          <div>
-            <Link href="/login">
-              <a className="mr-3 hover:text-gray-100">Login</a>
-            </Link>
-            <Link href="/signup">
-              <a className="hover:text-gray-100">Sign up</a>
-            </Link>
-            <IconButton
-              className="relative"
-              onClick={() => setMenuOpen(!menuOpen)}
-            >
-              <AccountCircle className="text-white" />
-            </IconButton>
-            {menuOpen && menu}
-          </div>
+          {user ? (
+            <div>
+              <Link href="/">
+                <a className="hover:text-gray-100">{user.username}</a>
+              </Link>
+              <IconButton
+                className="relative"
+                onClick={() => setMenuOpen(!menuOpen)}
+              >
+                <AccountCircle className="text-white" />
+              </IconButton>
+              {menuOpen && loggedInMenu}
+            </div>
+          ) : (
+            <div>
+              <Link href="/login">
+                <a className="mr-3 hover:text-gray-100">Login</a>
+              </Link>
+              <Link href="/signup">
+                <a className="hover:text-gray-100">Sign up</a>
+              </Link>
+              <IconButton
+                className="relative"
+                onClick={() => setMenuOpen(!menuOpen)}
+              >
+                <Menu className="text-white" />
+              </IconButton>
+              {menuOpen && guestMenu}
+            </div>
+          )}
         </div>
       </Container>
     </nav>

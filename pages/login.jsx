@@ -16,7 +16,7 @@ import Heading from "../components/UI/Heading";
 import Alert from "../components/alert";
 import Input from "../components/formInput";
 
-const Login = () => {
+const Login = ({ setAlert, setUser }) => {
   const router = useRouter();
   const [errors, setErrors] = useState({});
   const [email, setEmail] = useState("");
@@ -51,12 +51,15 @@ const Login = () => {
         .post("/api/auth/login", data)
         .then((res) => {
           setLoading(false);
-          localStorage.setItem("user", res.data);
+          console.log(res.data);
+          localStorage.setItem("user", JSON.stringify(res.data));
+          setAlert(`Logged in as ${res.data.username}`);
+          setUser(res.data);
           router.push("/");
         })
         .catch((err) => {
           setLoading(false);
-          console.log(err.response.data);
+          console.log(err);
           if (err.response.data.error) setLoginError(err.response.data.error);
         });
       setLoading(false);

@@ -79,7 +79,7 @@ const NewFile = () => {
           <Editor
             width="800"
             height="60vh"
-            language={language}
+            language={'language'}
             theme="vs-dark"
             value={code}
             onChange={handleEditorChange}

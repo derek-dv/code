@@ -1,13 +1,16 @@
 import Head from "next/head";
-import { Provider } from "react-redux";
+import { useState } from "react";
 
 // Components
 import Layout from "../components/Layout";
+import Alert from "../components/alert";
 
 //
 import "../styles/globals.css";
 
 function MyApp({ Component, pageProps }) {
+  const [alert, setAlert] = useState();
+  const [user, setUser] = useState();
   return (
     <>
       <Head>
@@ -17,10 +20,9 @@ function MyApp({ Component, pageProps }) {
           content="We are the best code sharing application"
         />
       </Head>
-      <div id="backdrop-bottom-placeholder"></div>
-      <div id="notifications-placeholder"></div>
-      <Layout>
-        <Component {...pageProps} />
+      <Layout user={user}>
+        {alert ? <Alert varient="success" text={alert} /> : null}
+        <Component setAlert={setAlert} setUser={setUser} {...pageProps} />
       </Layout>
     </>
   );

@@ -6,23 +6,23 @@ import {
   Button,
 } from "@material-ui/core";
 import Link from "next/link";
-import {useRouter} from "next/router"
+import { useRouter } from "next/router";
 import { useState } from "react";
 import { useForm, FormProvider } from "react-hook-form";
-import axios from "axios"
+import axios from "axios";
 import Alert from "../components/alert";
 import Input from "../components/formInput";
 import { signupSchema } from "../utils/schema/authSchema";
 
-const Signup = () => {
+const Signup = ({setAlert}) => {
   const [errors, setErrors] = useState({});
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
-  const [signupError, setSignupError] = useState()
+  const [signupError, setSignupError] = useState();
 
-  const router = useRouter()
+  const router = useRouter();
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -48,15 +48,16 @@ const Signup = () => {
       error.confirm = "Passwords do not match";
       isError = true;
     }
-    setErrors(error)
+    setErrors(error);
 
     if (!isError) {
-      const data = { username, email, password, confirmPassword: confirm }
+      const data = { username, email, password, confirmPassword: confirm };
       axios
         .post("/api/auth/signup", data)
         .then((res) => {
-          console.log(res.data)
+          console.log(res.data);
           localStorage.setItem("user", res.data);
+          setAlert("You can now login")
           router.push("/login");
         })
         .catch((err) => {
@@ -69,52 +70,53 @@ const Signup = () => {
       <div
         style={{ padding: "10rem 0" }}
         className="flex items-center justify-center flex-col"
-      >{signupError ? <Alert variant="error" text={signupError} /> : null}
+      >
+        {signupError ? <Alert variant="error" text={signupError} /> : null}
         <Paper className="p-4 pt-0 w-full lg:w-96">
           <h2 className="text-xl font-bold">Sign Up</h2>
-            <form onSubmit={handleSubmit} autoComplete="off">
-              <div className="w-full mt-2">
-                <Input
-                  label="Username"
-                  error={errors.username ? errors.username : null}
-                  setValue={setUsername}
-                />
-              </div>
+          <form onSubmit={handleSubmit} autoComplete="off">
+            <div className="w-full mt-2">
+              <Input
+                label="Username"
+                error={errors.username ? errors.username : null}
+                setValue={setUsername}
+              />
+            </div>
 
-              <div className="w-full mt-2">
-                <Input
-                  label="Email"
-                  error={errors.email ? errors.email : null}
-                  setValue={setEmail}
-                />
-              </div>
+            <div className="w-full mt-2">
+              <Input
+                label="Email"
+                error={errors.email ? errors.email : null}
+                setValue={setEmail}
+              />
+            </div>
 
-              <div className="w-full mt-2">
-                <Input
-                  type="password"
-                  label="Password"
-                  error={errors.password ? errors.password : null}
-                  setValue={setPassword}
-                />
-              </div>
+            <div className="w-full mt-2">
+              <Input
+                type="password"
+                label="Password"
+                error={errors.password ? errors.password : null}
+                setValue={setPassword}
+              />
+            </div>
 
-              <div className="w-full mt-2 mb-3">
-                <Input
-                  type="password"
-                  label="Confirm Password"
-                  error={errors.confirm ? errors.confirm : null}
-                  setValue={setConfirm}
-                />
-              </div>
+            <div className="w-full mt-2 mb-3">
+              <Input
+                type="password"
+                label="Confirm Password"
+                error={errors.confirm ? errors.confirm : null}
+                setValue={setConfirm}
+              />
+            </div>
 
-              <Button
-                style={{ backgroundColor: "blue" }}
-                className="text-white text-bold"
-                type="submit"
-              >
-                Signup
-              </Button>
-            </form>
+            <Button
+              style={{ backgroundColor: "blue" }}
+              className="text-white text-bold"
+              type="submit"
+            >
+              Signup
+            </Button>
+          </form>
         </Paper>
         <p className="mt-2 text-sm text-gray-500 text-left">
           Already have an account?{"  "}
