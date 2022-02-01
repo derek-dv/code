@@ -11,9 +11,11 @@ async function Files(req, res) {
       break;
 
     case "POST":
+      console.debug(req.body);
       const file = new File({
         fileName: req.body.fileName,
         language: req.body.language,
+        author_id: req.body.author_id,
         code: req.body.code,
       });
 

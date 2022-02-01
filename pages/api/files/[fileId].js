@@ -19,8 +19,23 @@ export default async (req, res) => {
       }
       break;
 
+    case "PUT":
+      try{
+        const temp = await File.findOne({_id: id})
+        const file = await File.findOneAndUpdate({_id: id}, {
+          fileName : req.body.fileName ? req.body.fileName : temp.fileName,
+          code: req.body.code ? req.body.code : temp.code
+        })
+        file.save()
+        res.send(file)
+      }
+      catch(err) {
+        console.log(err)
+      }
+      break
+
     default:
-      res.status(403).send("HTTP method not allowed");
+      res.status(403).send(`HTTP method ${httpMethod} not allowed`);
       break;
   }
 };

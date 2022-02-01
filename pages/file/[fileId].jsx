@@ -9,14 +9,14 @@ import { files } from "../../dummy";
 
 import Editor from "@monaco-editor/react";
 
-const NewFile = () => {
+const NewFile = ({ user, setAlert }) => {
   const { query } = useRouter();
   const fileId = query.fileId || null;
   const [code, setCode] = useState("");
   const [language, setLanguage] = useState("javascript");
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(true);
-  // fileName, language, code
+  const [isAuthor, setAuthor] = useState(false);
 
   const handleEditorChange = (value, event) => {
     console.log(event);
@@ -25,13 +25,22 @@ const NewFile = () => {
 
   useEffect(() => {
     if (!fileId) return;
+    let user_id;
+    if (user) {
+      user_id = user.user_id;
+    } else if (localStorage.getItem("guestId")) {
+      user_id = localStorage.getItem("guestId");
+    } else user_id = null;
+
     setLoading(true);
     axios
       .get(`/api/files/${fileId}`)
       .then((res) => {
         console.log(res.data);
-        const { fileName, language, code } = res.data;
+        const { fileName, language, code, author_id } = res.data;
+        if (user_id === author_id) setAuthor(true);
         setName(fileName);
+        console.log(author_id);
         setCode(code);
         setLanguage(language);
         setLoading(false);
@@ -40,15 +49,34 @@ const NewFile = () => {
         console.log(error);
       });
   }, [fileId]);
+
+  const handlePut = (e) => {
+    e.preventDefault()
+    const data = {
+      code,
+      fileName: name,
+    }
+
+    axios.put(`/api/files/${fileId}`, data).then((res)=>{
+      setAlert('File edited!')
+      setTimeout(()=>{
+        setAlert(null)
+      }, 5000)
+      router.push('/')
+    }).catch((err)=>{
+      console.error(err)
+    })
+
+  }
   return (
     <>
       <Head>
-        <title>Viewing {name} | Code Sharing Application</title>
+        <title>{isAuthor ? 'Editing ' : 'Viewing '} file | Code Sharing Application</title>
       </Head>
       <Container>
         <div className="py-6">
           <Heading className="mb-6" type="sectionHeading">
-            Editing {name ? name : ""}
+            {isAuthor?'Editing ' : 'Viewing '}file
           </Heading>
 
           <div className="mb-2">
@@ -65,22 +93,45 @@ const NewFile = () => {
               <MenuItem value="css">CSS</MenuItem>
               <MenuItem value="markdown">Markdown</MenuItem>
             </Select>
-            <Input
-              style={{ marginLeft: "2rem" }}
-              value={name}
-              disabled
-              placeholder="File name"
-            />
-            <Button
-              style={{
-                backgroundColor: "blue",
-                padding: "0.1rem 0.5rem",
-                marginLeft: "0.5rem",
-              }}
-              disabled
-            >
-              Save
-            </Button>
+            {isAuthor ? (
+              <>
+                <Input
+                  style={{ marginLeft: "2rem" }}
+                  value={name}
+                  placeholder="File name"
+                  onChange={(e)=>setName(e.target.value)}
+                />
+                <Button
+                  onClick={handlePut}
+                  style={{
+                    backgroundColor: "blue",
+                    padding: "0.1rem 0.5rem",
+                    marginLeft: "0.5rem",
+                  }}
+                >
+                  Edit
+                </Button>
+              </>
+            ) : (
+              <>
+                <Input
+                  style={{ marginLeft: "2rem" }}
+                  value={name}
+                  disabled
+                  placeholder="File name"
+                />
+                <Button
+                  style={{
+                    backgroundColor: "blue",
+                    padding: "0.1rem 0.5rem",
+                    marginLeft: "0.5rem",
+                  }}
+                  disabled
+                >
+                  Edit
+                </Button>
+              </>
+            )}
           </div>
           <div className="flex flex-wrap gap-5">
             <Editor

@@ -14,7 +14,7 @@ import Alert from "../components/alert";
 import Input from "../components/formInput";
 import { signupSchema } from "../utils/schema/authSchema";
 
-const Signup = ({setAlert}) => {
+const Signup = ({ setAlert }) => {
   const [errors, setErrors] = useState({});
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -57,8 +57,11 @@ const Signup = ({setAlert}) => {
         .then((res) => {
           console.log(res.data);
           localStorage.setItem("user", res.data);
-          setAlert("You can now login")
+          setAlert("You can now login");
           router.push("/login");
+          setTimeout(() => {
+            setAlert(null);
+          }, 5000);
         })
         .catch((err) => {
           if (err.response.data) setSignupError(err.response.data.error);

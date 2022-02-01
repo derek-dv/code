@@ -1,5 +1,6 @@
 import Head from "next/head";
-import { useState } from "react";
+import crypto from "crypto";
+import { useState, useEffect } from "react";
 
 // Components
 import Layout from "../components/Layout";
@@ -11,6 +12,18 @@ import "../styles/globals.css";
 function MyApp({ Component, pageProps }) {
   const [alert, setAlert] = useState();
   const [user, setUser] = useState();
+
+  useEffect(() => {
+    if (!localStorage.getItem("user") && !localStorage.getItem("guestId")) {
+      const guestId = crypto.randomBytes(16).toString("hex");
+      localStorage.setItem("guestId", guestId);
+    }
+
+    if(localStorage.getItem("user")){
+      const temp = JSON.parse(localStorage.getItem("user"))
+      setUser(temp)
+    }
+  }, []);
   return (
     <>
       <Head>
@@ -22,7 +35,12 @@ function MyApp({ Component, pageProps }) {
       </Head>
       <Layout user={user}>
         {alert ? <Alert varient="success" text={alert} /> : null}
-        <Component setAlert={setAlert} setUser={setUser} {...pageProps} />
+        <Component
+          user={user}
+          setAlert={setAlert}
+          setUser={setUser}
+          {...pageProps}
+        />
       </Layout>
     </>
   );

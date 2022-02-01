@@ -51,11 +51,14 @@ const Login = ({ setAlert, setUser }) => {
         .post("/api/auth/login", data)
         .then((res) => {
           setLoading(false);
-          console.log(res.data);
           localStorage.setItem("user", JSON.stringify(res.data));
+          localStorage.removeItem("guestId");
           setAlert(`Logged in as ${res.data.username}`);
           setUser(res.data);
           router.push("/");
+          setTimeout(() => {
+            setAlert(null);
+          }, 5000);
         })
         .catch((err) => {
           setLoading(false);

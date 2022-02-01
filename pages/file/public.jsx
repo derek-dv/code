@@ -13,34 +13,25 @@ import {
 } from "@material-ui/core";
 import { Add, MoreVert } from "@material-ui/icons";
 
-import Heading from "../components/UI/Heading";
+import Heading from "../../components/UI/Heading";
 // import { files } from "../dummy";
 
-const Files = ({user}) => {
+const Files = () => {
   const router = useRouter();
   const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     setLoading(true);
-    let author_id;
-    if(user){
-      author_id=user.user_id
-    }
-    else if(localStorage.getItem("guestId")){
-      author_id = localStorage.getItem("guestId")
-    }
-    else author_id=null
     axios
-      .get(`/api/files/author/${author_id}`)
+      .get("/api/files")
       .then((res) => {
-        const ser = res.data;
+        const ser = res.data.files;
         setLoading(false);
         console.log(ser);
         setFiles(ser);
       })
       .catch((error) => {
         console.log(error);
-        setLoading(false)
       });
   }, []);
 
@@ -48,7 +39,7 @@ const Files = ({user}) => {
     <Container className="">
       <div className="">
         <Heading className="mt-4" type="sectionHeading">
-          My Files
+          Public files
         </Heading>
         <Input className="w-48 mb-2" placeholder="Search" />
         <div className="">
@@ -75,7 +66,7 @@ const Files = ({user}) => {
                 height: "19rem",
               }}
             >
-              <Link href={`file/${file._id}`}>
+              <Link href={`/file/${file._id}`}>
                 <a>
                   <img
                     style={{
@@ -91,9 +82,7 @@ const Files = ({user}) => {
                 <p className="h-full my-auto text-sm font-bold text-gray-800">
                   {file.fileName}
                 </p>
-                <IconButton size="small" onClick={() => alert("clicked")}>
-                  <MoreVert size="small" />
-                </IconButton>
+              
               </div>
             </Card>
           ))

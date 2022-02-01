@@ -1,15 +1,13 @@
 import Head from "next/head";
+import crypto from "crypto";
 import { useRouter } from "next/router";
 import axios from "axios";
 import { Button, Container, Input, Select, MenuItem } from "@material-ui/core";
-import dynamic from "next/dynamic";
-import { FormProvider, useForm } from "react-hook-form";
 import { useState } from "react";
-import { yupResolver } from "@hookform/resolvers/yup";
 import Heading from "../../components/UI/Heading";
 import Editor from "@monaco-editor/react";
 
-const NewFile = () => {
+const NewFile = ({ user }) => {
   const router = useRouter();
   const [fileName, setFileName] = useState("");
   const [language, setLanguage] = useState("javascript");
@@ -17,9 +15,22 @@ const NewFile = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    let author_id;
+    if (user) {
+      author_id = user.user_id;
+    } else if (localStorage.getItem("guestId")) {
+      author_id = localStorage.getItem("guestId");
+    } else {
+      const guestId = crypto.randomBytes(16).toString("hex");
+      author_id = guestId;
+      localStorage.setItem("guestId", guestId);
+    }
+
+    console.log(author_id);
     const data = {
       fileName,
       language,
+      author_id,
       code,
     };
     axios.post("/api/files", data).then((res) => {
@@ -79,7 +90,7 @@ const NewFile = () => {
           <Editor
             width="800"
             height="60vh"
-            language={'language'}
+            language={"language"}
             theme="vs-dark"
             value={code}
             onChange={handleEditorChange}

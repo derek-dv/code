@@ -32,7 +32,7 @@ function Navbar({ user }) {
         </Link>
       </MenuItem>
     </div>
-  )
+  );
   const loggedInMenu = (
     <div className="z-20 absolute -text-white rounded w-44 flex flex-col m-0 p-0 bg-slate-500">
       <MenuItem>
