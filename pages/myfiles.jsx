@@ -16,20 +16,18 @@ import { Add, MoreVert } from "@material-ui/icons";
 import Heading from "../components/UI/Heading";
 // import { files } from "../dummy";
 
-const Files = ({user}) => {
+const Files = ({ user }) => {
   const router = useRouter();
   const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     setLoading(true);
     let author_id;
-    if(user){
-      author_id=user.user_id
-    }
-    else if(localStorage.getItem("guestId")){
-      author_id = localStorage.getItem("guestId")
-    }
-    else author_id=null
+    if (user) {
+      author_id = user.user_id;
+    } else if (localStorage.getItem("guestId")) {
+      author_id = localStorage.getItem("guestId");
+    } else author_id = null;
     axios
       .get(`/api/files/author/${author_id}`)
       .then((res) => {
@@ -40,7 +38,7 @@ const Files = ({user}) => {
       })
       .catch((error) => {
         console.log(error);
-        setLoading(false)
+        setLoading(false);
       });
   }, []);
 

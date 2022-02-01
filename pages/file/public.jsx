@@ -82,7 +82,6 @@ const Files = () => {
                 <p className="h-full my-auto text-sm font-bold text-gray-800">
                   {file.fileName}
                 </p>
-              
               </div>
             </Card>
           ))

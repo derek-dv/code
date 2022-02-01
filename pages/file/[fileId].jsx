@@ -51,32 +51,36 @@ const NewFile = ({ user, setAlert }) => {
   }, [fileId]);
 
   const handlePut = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     const data = {
       code,
       fileName: name,
-    }
+    };
 
-    axios.put(`/api/files/${fileId}`, data).then((res)=>{
-      setAlert('File edited!')
-      setTimeout(()=>{
-        setAlert(null)
-      }, 5000)
-      router.push('/')
-    }).catch((err)=>{
-      console.error(err)
-    })
-
-  }
+    axios
+      .put(`/api/files/${fileId}`, data)
+      .then((res) => {
+        setAlert("File edited!");
+        setTimeout(() => {
+          setAlert(null);
+        }, 5000);
+        router.push("/");
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
   return (
     <>
       <Head>
-        <title>{isAuthor ? 'Editing ' : 'Viewing '} file | Code Sharing Application</title>
+        <title>
+          {isAuthor ? "Editing " : "Viewing "} file | Code Sharing Application
+        </title>
       </Head>
       <Container>
         <div className="py-6">
           <Heading className="mb-6" type="sectionHeading">
-            {isAuthor?'Editing ' : 'Viewing '}file
+            {isAuthor ? "Editing " : "Viewing "}file
           </Heading>
 
           <div className="mb-2">
@@ -99,7 +103,7 @@ const NewFile = ({ user, setAlert }) => {
                   style={{ marginLeft: "2rem" }}
                   value={name}
                   placeholder="File name"
-                  onChange={(e)=>setName(e.target.value)}
+                  onChange={(e) => setName(e.target.value)}
                 />
                 <Button
                   onClick={handlePut}

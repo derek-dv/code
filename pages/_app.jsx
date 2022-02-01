@@ -19,9 +19,9 @@ function MyApp({ Component, pageProps }) {
       localStorage.setItem("guestId", guestId);
     }
 
-    if(localStorage.getItem("user")){
-      const temp = JSON.parse(localStorage.getItem("user"))
-      setUser(temp)
+    if (localStorage.getItem("user")) {
+      const temp = JSON.parse(localStorage.getItem("user"));
+      setUser(temp);
     }
   }, []);
   return (
