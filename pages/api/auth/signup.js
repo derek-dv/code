@@ -24,7 +24,7 @@ export default async function (req, res) {
 
           console.log(user);
 
-          const createdUser = await user.save();
+          const createdUser = user;
           console.log(
             `http://localhost:3000/verify-token/${createdUser.verifyToken}`
           );
@@ -32,7 +32,7 @@ export default async function (req, res) {
           const mailOptions = {
             to: user.email,
             from: process.env.EMAIL,
-            subject: "Verify account | Code Sahring Application",
+            subject: "Verify account | Code Sharing Application",
             html: `<h1>Email Verification</h1>
                   <p>You have successfully created an account with this Email
                   Please click the link below to verify the account</p>

@@ -14,12 +14,21 @@ import {
 import { Add, MoreVert } from "@material-ui/icons";
 
 import Heading from "../components/UI/Heading";
-// import { files } from "../dummy";
+import ReactGrid from "../components/reactGrid";
 
 const Files = ({ user }) => {
   const router = useRouter();
   const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [columns, setColumns] = useState([
+    { name: "_id", name: "File ID" },
+    { name: "fileName", name: "File Name" },
+    { name: "language", name: "Language" },
+    { name: "createdAt", name: "Created At" },
+    { name: "updatedAt", name: "Updated At" },
+  ]);
+
+  const [rows, setRows] = useState();
   useEffect(() => {
     setLoading(true);
     let author_id;
@@ -35,6 +44,7 @@ const Files = ({ user }) => {
         setLoading(false);
         console.log(ser);
         setFiles(ser);
+        setRows(ser);
       })
       .catch((error) => {
         console.log(error);
@@ -62,40 +72,8 @@ const Files = ({ user }) => {
           </Button>
         </div>
       </div>
-      <div className="flex gap-4 flex-wrap">
-        {loading ? (
-          <p>Loading</p>
-        ) : (
-          files.map((file) => (
-            <Card
-              style={{
-                width: "15rem",
-                height: "19rem",
-              }}
-            >
-              <Link href={`file/${file._id}`}>
-                <a>
-                  <img
-                    style={{
-                      maxWidth: "15rem",
-                      minHeight: "17rem",
-                    }}
-                    src="/code2.jpg"
-                  />
-                </a>
-              </Link>
-
-              <div className="mx-2 flex justify-between items center">
-                <p className="h-full my-auto text-sm font-bold text-gray-800">
-                  {file.fileName}
-                </p>
-                <IconButton size="small" onClick={() => alert("clicked")}>
-                  <MoreVert size="small" />
-                </IconButton>
-              </div>
-            </Card>
-          ))
-        )}
+      <div className="">
+        {loading ? <p>Loading</p> : <ReactGrid rows={rows} columns={columns} />}
       </div>
     </Container>
   );

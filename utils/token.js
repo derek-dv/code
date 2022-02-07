@@ -9,8 +9,7 @@ export const generateToken = (user) => {
       password: user.password,
       isAdmin: user.isAdmin,
     },
-    process.env.JWT_SECRET || "Secret",
-    { expiresIn: "5m" }
+    process.env.JWT_SECRET || "Secret"
   );
 };
 

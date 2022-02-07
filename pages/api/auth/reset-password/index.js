@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import crypto from "crypto";
-import dbConnect from "../../../../utils/dbconnect";
+import dbConnect, {transporter} from "../../../../utils/dbconnect";
 import User from "../../../../model/User";
 
 dbConnect();
@@ -30,7 +30,7 @@ export default async function (req, res) {
           from: process.env.EMAIL,
           subject: "Reset password | Code Sharing Application",
           html: `<h1>Email Verification</h1>
-                  <p>You have made a request to reseyour password.
+                  <p>You have made a request to reset password.
                   Please click the link below to do so.</p>
                   <a href="http://works.codemash.me/reset-password/${modifiedUser.verifyToken}">Reset password</a>`,
         };
