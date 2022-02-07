@@ -11,12 +11,14 @@ import Editor from "@monaco-editor/react";
 
 const NewFile = ({ user, setAlert }) => {
   const { query } = useRouter();
+  const router = useRouter();
   const fileId = query.fileId || null;
   const [code, setCode] = useState("");
   const [language, setLanguage] = useState("javascript");
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(true);
   const [isAuthor, setAuthor] = useState(false);
+  const [authorId, setAuthorId] = useState();
 
   const handleEditorChange = (value, event) => {
     console.log(event);
@@ -25,12 +27,13 @@ const NewFile = ({ user, setAlert }) => {
 
   useEffect(() => {
     if (!fileId) return;
-    let user_id;
     if (user) {
-      user_id = user.user_id;
+      setAuthorId(user.user_id);
     } else if (localStorage.getItem("guestId")) {
-      user_id = localStorage.getItem("guestId");
-    } else user_id = null;
+      setAuthorId(localStorage.getItem("guestId"));
+    } else setAuthorId(null);
+
+    console.log(authorId);
 
     setLoading(true);
     axios
@@ -38,9 +41,8 @@ const NewFile = ({ user, setAlert }) => {
       .then((res) => {
         console.log(res.data);
         const { fileName, language, code, author_id } = res.data;
-        if (user_id === author_id) setAuthor(true);
+        if (authorId === author_id) setAuthor(true);
         setName(fileName);
-        console.log(author_id);
         setCode(code);
         setLanguage(language);
         setLoading(false);
@@ -50,6 +52,22 @@ const NewFile = ({ user, setAlert }) => {
       });
   }, [fileId]);
 
+  const handlePost = (e) => {
+    e.preventDefault();
+    const data = {
+      fileName: name,
+      language,
+      author_id: authorId,
+      code,
+    };
+
+    console.log(authorId);
+
+    axios.post("/api/files", data).then((res) => {
+      console.log(res.data);
+      router.push("/myfiles");
+    });
+  };
   const handlePut = (e) => {
     e.preventDefault();
     const data = {
@@ -121,7 +139,7 @@ const NewFile = ({ user, setAlert }) => {
                 <Input
                   style={{ marginLeft: "2rem" }}
                   value={name}
-                  disabled
+                  onChange={(e) => setName(e.target.value)}
                   placeholder="File name"
                 />
                 <Button
@@ -130,9 +148,9 @@ const NewFile = ({ user, setAlert }) => {
                     padding: "0.1rem 0.5rem",
                     marginLeft: "0.5rem",
                   }}
-                  disabled
+                  onClick={handlePost}
                 >
-                  Edit
+                  Save new copy
                 </Button>
               </>
             )}

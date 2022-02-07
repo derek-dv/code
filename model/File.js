@@ -9,23 +9,26 @@ function modelDeclared() {
   }
 }
 
-const fileSchema = new mongoose.Schema({
-  fileName: {
-    type: String,
-    required: [true, "Please add a file name"],
+const fileSchema = new mongoose.Schema(
+  {
+    fileName: {
+      type: String,
+      required: [true, "Please add a file name"],
+    },
+    language: {
+      type: String,
+      required: [true, "Please add a language"],
+    },
+    code: {
+      type: String,
+      required: true,
+    },
+    author_id: {
+      type: String,
+      required: true,
+    },
   },
-  language: {
-    type: String,
-    required: [true, "Please add a language"],
-  },
-  code: {
-    type: String,
-    required: true,
-  },
-  author_id: {
-    type: String,
-    required: true,
-  },
-});
+  { timestamps: true }
+);
 
 module.exports = mongoose.models.File || mongoose.model("File", fileSchema);

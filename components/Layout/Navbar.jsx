@@ -69,7 +69,7 @@ function Navbar({ user }) {
           {user ? (
             <div>
               <Link href="/">
-                <a className="hover:text-gray-100">{user.username}</a>
+                <a className="hover:text-gray-100">{user.email}</a>
               </Link>
               <IconButton
                 className="relative"

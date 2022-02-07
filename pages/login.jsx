@@ -16,13 +16,17 @@ import Heading from "../components/UI/Heading";
 import Alert from "../components/alert";
 import Input from "../components/formInput";
 
-const Login = ({ setAlert, setUser }) => {
+const Login = ({ setAlert, setUser, user }) => {
   const router = useRouter();
   const [errors, setErrors] = useState({});
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [loginError, setLoginError] = useState();
+
+  if (user) {
+    router.push("/");
+  }
 
   const submit = (e) => {
     e.preventDefault();
@@ -53,7 +57,7 @@ const Login = ({ setAlert, setUser }) => {
           setLoading(false);
           localStorage.setItem("user", JSON.stringify(res.data));
           localStorage.removeItem("guestId");
-          setAlert(`Logged in as ${res.data.username}`);
+          setAlert(`Logged in as ${res.data.email}`);
           setUser(res.data);
           router.push("/");
           setTimeout(() => {
@@ -121,6 +125,9 @@ const Login = ({ setAlert, setUser }) => {
             <a className="text-blue-400 underline">Signup</a>
           </Link>
         </p>
+        <Link href="/reset-password">
+          <a className="text-blue-400">Forgot password</a>
+        </Link>
       </div>
     </Container>
   );

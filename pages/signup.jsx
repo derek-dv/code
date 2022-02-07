@@ -16,7 +16,6 @@ import { signupSchema } from "../utils/schema/authSchema";
 
 const Signup = ({ setAlert }) => {
   const [errors, setErrors] = useState({});
-  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
@@ -29,11 +28,6 @@ const Signup = ({ setAlert }) => {
     let error = {};
 
     let isError = false;
-    if (username.length < 1) {
-      error.username = "Username is required";
-      isError = true;
-    }
-
     if (email.length < 1) {
       error.email = "Email is required";
       isError = true;
@@ -51,14 +45,13 @@ const Signup = ({ setAlert }) => {
     setErrors(error);
 
     if (!isError) {
-      const data = { username, email, password, confirmPassword: confirm };
+      const data = { email, password, confirmPassword: confirm };
       axios
         .post("/api/auth/signup", data)
         .then((res) => {
           console.log(res.data);
-          localStorage.setItem("user", res.data);
-          setAlert("You can now login");
-          router.push("/login");
+          setAlert("Please check your Email for verification steps");
+          router.push("/emailVerify");
           setTimeout(() => {
             setAlert(null);
           }, 5000);
@@ -78,14 +71,6 @@ const Signup = ({ setAlert }) => {
         <Paper className="p-4 pt-0 w-full lg:w-96">
           <h2 className="text-xl font-bold">Sign Up</h2>
           <form onSubmit={handleSubmit} autoComplete="off">
-            <div className="w-full mt-2">
-              <Input
-                label="Username"
-                error={errors.username ? errors.username : null}
-                setValue={setUsername}
-              />
-            </div>
-
             <div className="w-full mt-2">
               <Input
                 label="Email"

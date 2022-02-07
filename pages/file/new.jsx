@@ -16,8 +16,10 @@ const NewFile = ({ user }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     let author_id;
+    let jwtToken;
     if (user) {
       author_id = user.user_id;
+      jwtToken = user.jwtToken;
     } else if (localStorage.getItem("guestId")) {
       author_id = localStorage.getItem("guestId");
     } else {
@@ -33,7 +35,16 @@ const NewFile = ({ user }) => {
       author_id,
       code,
     };
-    axios.post("/api/files", data).then((res) => {
+
+    const config = {
+      headers: {
+        "content-type": "application/json",
+        Authorization: `Bearer ${jwtToken}`,
+      },
+    };
+
+    console.log(jwtToken);
+    axios.post("/api/files", data, config).then((res) => {
       console.log(res.data);
       router.push("/myfiles");
     });
