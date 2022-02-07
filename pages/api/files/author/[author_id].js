@@ -11,7 +11,7 @@ export default async (req, res) => {
     case "GET":
       try {
         const file = await File.find({ author_id: id });
-        console.log(id);
+        console.log("id", id);
         res.status(200).json(file);
         console.log(file);
       } catch (error) {

@@ -36,7 +36,9 @@ const Files = ({ user }) => {
       author_id = user.user_id;
     } else if (localStorage.getItem("guestId")) {
       author_id = localStorage.getItem("guestId");
-    } else author_id = null;
+    }
+
+    console.log(user);
     axios
       .get(`/api/files/author/${author_id}`)
       .then((res) => {
@@ -45,12 +47,13 @@ const Files = ({ user }) => {
         console.log(ser);
         setFiles(ser);
         setRows(ser);
+        console.log(user);
       })
       .catch((error) => {
         console.log(error);
         setLoading(false);
       });
-  }, []);
+  }, [user]);
 
   return (
     <Container className="">
@@ -73,6 +76,7 @@ const Files = ({ user }) => {
         </div>
       </div>
       <div className="">
+        user
         {loading ? <p>Loading</p> : <ReactGrid rows={rows} columns={columns} />}
       </div>
     </Container>

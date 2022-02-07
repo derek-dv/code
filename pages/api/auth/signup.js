@@ -24,7 +24,7 @@ export default async function (req, res) {
 
           console.log(user);
 
-          const createdUser = user;
+          const createdUser = await user.save();
           console.log(
             `http://localhost:3000/verify-token/${createdUser.verifyToken}`
           );

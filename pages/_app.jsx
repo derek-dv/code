@@ -24,6 +24,9 @@ function MyApp({ Component, pageProps }) {
       setUser(temp);
     }
   }, []);
+
+  console.log(user);
+
   return (
     <>
       <Head>
