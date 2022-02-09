@@ -22,7 +22,7 @@ export default async function (req, res) {
             new: true,
           }
         );
-        console.log(modifiedUser);
+        modifiedUser = await modifiedUser.save()
         res.json({ message: "password successfully changed" });
       } else {
         res.status(404).json({ error: "token not found" });
