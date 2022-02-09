@@ -51,6 +51,11 @@ function Navbar({ user }) {
         </Link>
       </MenuItem>
       <MenuItem>
+        <Link href="/profile">
+          <a className="w-full p-2">Profile</a>
+        </Link>
+      </MenuItem>
+      <MenuItem>
         <Link href="/logout">
           <a className="w-full p-2">Logout</a>
         </Link>

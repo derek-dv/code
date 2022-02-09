@@ -22,9 +22,7 @@ export default async function (req, res) {
           },
           { new: true }
         );
-        console.log(
-          `http://localhost:3000/reset-password/${modifiedUser.resetPasswordToken}`
-        );
+        modifiedUser.save();
         const mailOptions = {
           to: user.email,
           from: process.env.EMAIL,
@@ -32,13 +30,14 @@ export default async function (req, res) {
           html: `<h1>Email Verification</h1>
                   <p>You have made a request to reset password.
                   Please click the link below to do so.</p>
-                  <a href="http://works.codemash.me/reset-password/${modifiedUser.verifyToken}">Reset password</a>`,
+                  <a href="http://works.codemash.me/reset-password/${modifiedUser.resetPasswordToken}">Reset password</a>`,
         };
         transporter.sendMail(mailOptions, (err, data) => {
           if (err) {
             console.log(err);
           }
         });
+        modifiedUser.save();
         res.json({ modifiedUser });
       } else {
         res.status(404).json({ error: "User does not exist" });

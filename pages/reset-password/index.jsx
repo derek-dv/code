@@ -8,7 +8,7 @@ import Alert from "../../components/alert";
 
 export default function ({ setAlert }) {
   const { query } = useRouter();
-  const [msg, setMsg] = useState({});
+  const [msg, setMsg] = useState();
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
 
@@ -22,6 +22,9 @@ export default function ({ setAlert }) {
     axios
       .post(`/api/auth/reset-password`, data)
       .then((res) => {
+        setAlert(
+          `Reset link: works.codemash.me/reset-password/${res.data.modifiedUser.resetPasswordToken}`
+        );
         setMsg({ type: "success", text: "Check your Email for reset link" });
       })
       .catch((err) => {

@@ -1,6 +1,6 @@
 import { FormControl, TextField } from "@material-ui/core";
 
-function Input({ type, label, setValue, error }) {
+function Input({ type, label, setValue, error, required = false }) {
   return (
     <FormControl fullWidth>
       <TextField
@@ -10,6 +10,7 @@ function Input({ type, label, setValue, error }) {
         type={type ? type : "text"}
         error={error ? true : false}
         helperText={error ? error : null}
+        required={required}
       />
     </FormControl>
   );

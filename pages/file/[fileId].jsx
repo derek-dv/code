@@ -27,11 +27,14 @@ const NewFile = ({ user, setAlert }) => {
 
   useEffect(() => {
     if (!fileId) return;
+    let author_i;
     if (user) {
-      setAuthorId(user.user_id);
+      author_i = user.user_id;
+      setAuthorId(author_i);
     } else if (localStorage.getItem("guestId")) {
-      setAuthorId(localStorage.getItem("guestId"));
-    } else setAuthorId(null);
+      author_i = localStorage.getItem("guestId");
+      setAuthorId(author_i);
+    }
 
     console.log(authorId);
 
@@ -41,7 +44,7 @@ const NewFile = ({ user, setAlert }) => {
       .then((res) => {
         console.log(res.data);
         const { fileName, language, code, author_id } = res.data;
-        if (authorId === author_id) setAuthor(true);
+        if (author_id === author_i) setAuthor(true);
         setName(fileName);
         setCode(code);
         setLanguage(language);
@@ -50,7 +53,7 @@ const NewFile = ({ user, setAlert }) => {
       .catch((error) => {
         console.log(error);
       });
-  }, [fileId]);
+  }, [fileId, user]);
 
   const handlePost = (e) => {
     e.preventDefault();

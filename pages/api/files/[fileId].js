@@ -36,6 +36,17 @@ export default async (req, res) => {
       }
       break;
 
+    case "DELETE":
+      File.deleteOne({ _id: id })
+        .then((files) => {
+          res.json({ message: "File deleted" });
+        })
+        .catch(() => {
+          res.status(404).json({ error: "File with ID not found" });
+        });
+
+      break;
+
     default:
       res.status(403).send(`HTTP method ${httpMethod} not allowed`);
       break;

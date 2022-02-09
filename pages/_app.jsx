@@ -12,6 +12,7 @@ import "../styles/globals.css";
 function MyApp({ Component, pageProps }) {
   const [alert, setAlert] = useState();
   const [user, setUser] = useState();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!localStorage.getItem("user") && !localStorage.getItem("guestId")) {
@@ -22,10 +23,16 @@ function MyApp({ Component, pageProps }) {
     if (localStorage.getItem("user")) {
       const temp = JSON.parse(localStorage.getItem("user"));
       setUser(temp);
+    } else {
+      setUser(undefined);
     }
   }, []);
 
-  console.log(user);
+  useEffect(()=>{
+    setTimeout(()=>{
+      setAlert(null)
+    }, 10000)
+  }, [alert])
 
   return (
     <>

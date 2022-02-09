@@ -27,7 +27,7 @@ export default function ({ setAlert }) {
       })
       .catch((err) => {
         console.error(err.response);
-        // setMessage(err.response.data.error);
+        setErrors(err.response.data.error);
         setSuccess(false);
         setLoading(false);
       });
@@ -104,7 +104,9 @@ export default function ({ setAlert }) {
               </Button>
             </form>
           </Paper>
-        ) : null}
+        ) : (
+          <p>{errors}</p>
+        )}
       </div>
     </Container>
   );

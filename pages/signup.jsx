@@ -50,11 +50,13 @@ const Signup = ({ setAlert }) => {
         .post("/api/auth/signup", data)
         .then((res) => {
           console.log(res.data);
-          setAlert("Please check your Email for verification steps");
+          setAlert(
+            `Verification link: works.codemash.me/verify-token/${res.data.verifyToken}`
+          );
           router.push("/emailVerify");
-          setTimeout(() => {
-            setAlert(null);
-          }, 5000);
+          // setTimeout(() => {
+          //   setAlert(null);
+          // }, 5000);
         })
         .catch((err) => {
           if (err.response.data) setSignupError(err.response.data.error);

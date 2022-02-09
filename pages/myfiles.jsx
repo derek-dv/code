@@ -20,33 +20,28 @@ const Files = ({ user }) => {
   const router = useRouter();
   const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [columns, setColumns] = useState([
-    { name: "_id", name: "File ID" },
-    { name: "fileName", name: "File Name" },
-    { name: "language", name: "Language" },
-    { name: "createdAt", name: "Created At" },
-    { name: "updatedAt", name: "Updated At" },
-  ]);
+  const [authorId, setAuthorId] = useState();
 
-  const [rows, setRows] = useState();
   useEffect(() => {
     setLoading(true);
     let author_id;
     if (user) {
       author_id = user.user_id;
+      setAuthorId(author_id);
     } else if (localStorage.getItem("guestId")) {
       author_id = localStorage.getItem("guestId");
+      setAuthorId(author_id);
     }
 
-    console.log(user);
+    console.log(author_id);
     axios
       .get(`/api/files/author/${author_id}`)
       .then((res) => {
-        const ser = res.data;
-        setLoading(false);
+        const ser = res.data.files;
         console.log(ser);
         setFiles(ser);
         setRows(ser);
+        setLoading(false);
         console.log(user);
       })
       .catch((error) => {
@@ -77,7 +72,64 @@ const Files = ({ user }) => {
       </div>
       <div className="">
         user
-        {loading ? <p>Loading</p> : <ReactGrid rows={rows} columns={columns} />}
+        {loading ? (
+          <p>Loading</p>
+        ) : (
+          <table id="customers">
+            <thead>
+              <tr>
+                <th>Index</th>
+                <th>ID</th>
+                <th>Name</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {files
+                ? files.map((file, index) => (
+                    <tr>
+                      <td>{index}</td>
+                      <td>{file._id}</td>
+                      <td>{file.fileName}</td>
+                      <td>
+                        <>
+                          <Link href={`/file/${file._id}`}>
+                            <Button
+                              style={{
+                                backgroundColor: "blue",
+                                marginRight: "2rem",
+                              }}
+                            >
+                              Edit
+                            </Button>
+                          </Link>
+                          <Button
+                            style={{ backgroundColor: "red" }}
+                            onClick={() => {
+                              axios
+                                .delete(`/api/files/${file._id}`)
+                                .then((res) => {
+                                  axios
+                                    .get(`/api/files/author/${authorId}`)
+                                    .then((res) => {
+                                      setFiles(res.data.files);
+                                    })
+                                    .catch((err) => {
+                                      console.log(err);
+                                    });
+                                });
+                            }}
+                          >
+                            Delete
+                          </Button>
+                        </>
+                      </td>
+                    </tr>
+                  ))
+                : null}
+            </tbody>
+          </table>
+        )}
       </div>
     </Container>
   );

@@ -31,6 +31,8 @@ export default async function (req, res) {
 
     case "GET":
       let users = await User.findOne({ resetPasswordToken: token });
+      console.log(token);
+      console.log(users);
       if (users) {
         res.json({ message: "token exists" });
       } else {

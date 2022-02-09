@@ -5,7 +5,7 @@ import axios from "axios";
 import CustomInput from "../components/formInput";
 import Heading from "../components/UI/Heading";
 
-export default function ({ user, setAlert }) {
+export default function ({ setAlert, user }) {
   const router = useRouter();
   const [profile, setProfile] = useState();
   const [loading, setLoading] = useState(true);
@@ -17,13 +17,22 @@ export default function ({ user, setAlert }) {
   const [city, setCity] = useState("");
   const [description, setDescription] = useState("");
   const [country, setCountry] = useState("");
+  const [edit, setEdit] = useState(false);
 
   useEffect(() => {
     if (user) {
+      console.log(user);
       axios
-        .get(`/api/profile/${user._id}`)
+        .get(`/api/profile/${user.user_id}`)
         .then((res) => {
-          setProfile(res.data);
+          setProfile(res.data.profile);
+          let profile = res.data.profile;
+          setFirstName(profile.firstName);
+          setLastName(profile.lastName);
+          setAddress(profile.address);
+          setCity(profile.city);
+          setCountry(profile.country);
+          setDescription(profile.description);
           setError(false);
           setLoading(false);
         })
@@ -31,47 +40,122 @@ export default function ({ user, setAlert }) {
           setError(true);
           setLoading(false);
         });
-    }
-    else{
-      setAlert('You have to be logged in!')
-      router.push('/login')
+    } else {
+      setAlert("You have to be logged in!");
+      router.push("/login");
     }
   }, []);
 
+  const handleEdit = () => {
+    const data = {
+      firstName,
+      lastName,
+      address,
+      city,
+      description,
+      country,
+    };
+    axios
+      .put(`api/profile/${user.user_id}`, data)
+      .then((res) => {
+        setProfile(res.data.profile);
+        let profile = res.data.profile;
+        setFirstName(profile.firstName);
+        setLastName(profile.lastName);
+        setAddress(profile.address);
+        setCity(profile.city);
+        setCountry(profile.country);
+        setDescription(profile.description);
+        setEdit(false);
+      })
+      .catch((err) => {
+        setError(true);
+        setEdit(false);
+      });
+  };
+
   const submit = (e) => {
-    console.log(e);
+    e.preventDefault();
+
+    let user;
+
+    if (localStorage.getItem("user")) {
+      user = JSON.parse(localStorage.getItem("user"));
+    }
+
+    if (user) {
+      const data = {
+        firstName,
+        lastName,
+        address,
+        description,
+        city,
+        country,
+      };
+
+      axios
+        .post(`/api/profile/${user.user_id}`, data)
+        .then((res) => {
+          console.log(res.data);
+          setProfile(res.data.profile);
+          console.log(profile);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
 
   const profileForm = (
     <div
-      style={{ padding: "10rem 0" }}
+      style={{ padding: "6rem 0" }}
       className="flex items-center justify-center flex-col"
     >
       <Paper className="p-4 pt-0 w-full lg:w-96">
         <Heading type="sectionHeading">Create profile</Heading>
         <form onSubmit={submit} autoComplete="off">
           <div className="w-full my-3">
-            <CustomInput label="First Name" setValue={setFirstName} />
+            <CustomInput
+              required={true}
+              label="First Name"
+              setValue={setFirstName}
+            />
           </div>
 
           <div className="w-full my-3">
-            <CustomInput label="Last Name" setValue={setLastName} />
+            <CustomInput
+              required={true}
+              label="Last Name"
+              setValue={setLastName}
+            />
           </div>
 
           <div className="w-full my-3">
-            <CustomInput label="Description" setValue={setDescription} />
+            <CustomInput
+              required={true}
+              label="Description"
+              setValue={setDescription}
+            />
           </div>
 
           <div className="w-full my-3">
-            <CustomInput label="Address" setValue={setAddress} />
+            <CustomInput
+              required={true}
+              label="Address"
+              setValue={setAddress}
+            />
           </div>
 
           <div className="w-full my-3">
-            <CustomInput label="City" setValue={setCity} />
+            <CustomInput required={true} label="City" setValue={setCity} />
           </div>
 
           <div className="w-full my-3">
-            <CustomInput label="Country" setValue={setCountry} />
+            <CustomInput
+              required={true}
+              label="Country"
+              setValue={setCountry}
+            />
           </div>
 
           <Button
@@ -86,64 +170,111 @@ export default function ({ user, setAlert }) {
     </div>
   );
 
-  const profilePage = (
-    <>
-      <h2 className="profile-heading font-bold text-lg">Profile page</h2>
-      <div className="profile-main">
-        <div className="profile-info">
-          <div className="profile-img">
-            <img src="/code.png" />
+  return (
+    <Container className="mt-5">
+      {loading ? (
+        <p>Loading</p>
+      ) : profile ? (
+        <>
+          <h2 className="profile-heading font-bold text-lg">Profile page</h2>
+          <div className="profile-main">
+            <div className="profile-info">
+              <div className="profile-img">
+                <img src="/code.png" />
+              </div>
+              <div className="profile-personal">
+                <h2 className="profile-name font-bold">{`${firstName} ${lastName}`}</h2>
+                <p className="profile-address text-gray-400">{`${city}, ${country}`}</p>
+                {edit ? (
+                  <Input
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                  />
+                ) : (
+                  <>
+                    <p className="profile-description mb-2">{description}</p>
+                    <Button
+                      onClick={() => setEdit(true)}
+                      style={{
+                        backgroundColor: "blue",
+                      }}
+                    >
+                      Edit profile
+                    </Button>
+                  </>
+                )}
+              </div>
+            </div>
           </div>
-          <div className="profile-personal">
-            <h2 className="profile-name font-bold">John Doe</h2>
-            <p className="profile-address text-gray-400">New York, USA</p>
-            <p className="profile-description">
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit. Omnis ut
-              veritatis possimus commodi fuga quisquam? Beatae nesciunt aut quos
-              tempora.
-            </p>
-            <Button
-              style={{
-                backgroundColor: "blue",
-              }}
-            >
-              Edit profile
-            </Button>
-          </div>
-        </div>
-      </div>
 
-      <div className="profile-details">
-        <div className="files-summary">
-          <h3>Files Uploaded</h3>
-          <p>23 files Uploaded by user</p>
-        </div>
+          <div className="profile-details">
+            <h3>Files Uploaded</h3>
+            <p>X files Uploaded by user</p>
 
-        <div className="profile-section">
-          <h3 className="font-bold">Personal Information</h3>
-          <div className="profile-item">
-            <label>Name</label>
-            <Input value={"John Doe"} disabled label="name" />
+            <div className="profile-section">
+              <h3 className="font-bold">Personal Information</h3>
+              <div className="profile-item flex">
+                <label>First name</label>
+                <Input
+                  onChange={(e) => setFirstName(e.target.value)}
+                  value={firstName}
+                  disabled={edit ? false : true}
+                  label="name"
+                />
+              </div>
+              <div className="profile-item">
+                <label>Last name</label>
+                <Input
+                  onChange={(e) => setLastName(e.target.value)}
+                  value={lastName}
+                  disabled={edit ? false : true}
+                  label="name"
+                />
+              </div>
+              <div className="profile-item">
+                <label>Address</label>
+                <Input
+                  onChange={(e) => setAddress(e.target.value)}
+                  value={address}
+                  disabled={edit ? false : true}
+                  label="Address"
+                />
+              </div>
+              <div className="profile-item">
+                <label>City</label>
+                <Input
+                  value={city}
+                  onChange={(e) => setCity(e.target.value)}
+                  disabled={edit ? false : true}
+                  label="City"
+                />
+              </div>
+              <div className="profile-item">
+                <label>Country</label>
+                <Input
+                  value={country}
+                  onChange={(e) => setCountry(e.target.value)}
+                  disabled={edit ? false : true}
+                  label="Country"
+                />
+              </div>
+
+              {!edit ? null : (
+                <Button
+                  onClick={handleEdit}
+                  style={{
+                    backgroundColor: "blue",
+                  }}
+                >
+                  Save
+                </Button>
+              )}
+            </div>
           </div>
-          <div className="profile-item">
-            <label>Email</label>
-            <Input value={"john@test.com"} disabled label="Email" />
-          </div>
-          <div className="profile-item">
-            <label>Address</label>
-            <Input value={"123 test street"} disabled label="Address" />
-          </div>
-          <div className="profile-item">
-            <label>City</label>
-            <Input value={"New York"} disabled label="City" />
-          </div>
-          <div className="profile-item">
-            <label>Country</label>
-            <Input value={"USA"} disabled label="Country" />
-          </div>
-        </div>
-      </div>
-    </>
+        </>
+      ) : (
+        profileForm
+      )}
+    </Container>
   );
-  return <Container className="mt-5">{profileForm}</Container>;
 }

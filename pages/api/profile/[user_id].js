@@ -7,9 +7,9 @@ dbConnect();
 export default async function (req, res) {
   const httpMethod = req.method;
   const userId = req.query.user_id;
+  const user = await User.findOne({ _id: userId });
   switch (httpMethod) {
     case "POST":
-      const user = await User.findOne({ _id: userId });
       if (user) {
         console.log(user);
         const profile = new Profile({
@@ -29,6 +29,7 @@ export default async function (req, res) {
       break;
     case "GET":
       const user_ = await User.findOne({ _id: userId });
+      console.log(userId);
 
       if (user_) {
         const profile = await Profile.findOne({ user_id: userId });
@@ -36,6 +37,37 @@ export default async function (req, res) {
           res.json({ profile });
         } else res.status(404).json({ error: "Profile with ID not found" });
       } else res.status(404).json({ error: "User with ID not found" });
+      break;
+
+    case "PUT":
+      if (user) {
+        const profile = await Profile.findOne({ user_id: userId });
+        if (profile) {
+          const updated = await Profile.findOneAndUpdate(
+            { user_id: userId },
+            {
+              firstName: req.body.firstName
+                ? req.body.firstName
+                : profile.firstName,
+              lastName: req.body.lastName
+                ? req.body.lastName
+                : profile.lastName,
+              address: req.body.address ? req.body.address : profile.address,
+              description: req.body.description
+                ? req.body.description
+                : profile.description,
+              city: req.body.city ? req.body.city : profile.city,
+              country: req.body.country ? req.body.country : profile.country,
+            },
+            { new: true }
+          );
+          console.log(req.body.address);
+          updated.save();
+
+          res.json({ profile: updated });
+        } else res.status(404).send("Profile with ID not found");
+      } else res.status(404).send("User with ID not found");
+      break;
     default:
       res.status(403).send("Method not supported");
   }

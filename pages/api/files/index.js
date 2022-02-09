@@ -13,9 +13,9 @@ async function Files(req, res) {
 
     case "POST":
       const authorization = req.headers.authorization;
-      const token = authorization.slice(7, authorization.length);
+      // const token = authorization.slice(7, authorization.length);
       try {
-        const user = jwt.verify(token, process.env.JWT_SECRET);
+        // const user = jwt.verify(token, process.env.JWT_SECRET);
         const file = new File({
           fileName: req.body.fileName,
           language: req.body.language,
@@ -25,6 +25,7 @@ async function Files(req, res) {
 
         const createdFile = await file.save();
         res.status(201).send(createdFile);
+        return;
       } catch (err) {
         const { code } = req.body;
         if (Number(Buffer.byteLength(code, "utf8")) / 1000 < 200) {
