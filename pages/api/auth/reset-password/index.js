@@ -22,6 +22,8 @@ export default async function (req, res) {
           },
           { new: true }
         );
+
+        modifiedUser = await user.save()
         const mailOptions = {
           to: email,
           from: process.env.EMAIL,
@@ -36,7 +38,6 @@ export default async function (req, res) {
             console.log(err);
           }
         });
-        modifiedUser.save();
         res.json({ modifiedUser });
       } else {
         res.status(404).json({ error: "User does not exist" });
