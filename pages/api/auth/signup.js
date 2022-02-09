@@ -18,7 +18,7 @@ export default async function (req, res) {
           const user = new User({
             email,
             password: bcrypt.hashSync(password, 8),
-            verified: false,
+            verified: true,
             verifyToken: userToken,
           });
 
