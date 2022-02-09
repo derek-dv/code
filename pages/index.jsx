@@ -3,7 +3,7 @@ import Link from "next/link";
 
 import Heading from "../components/UI/Heading";
 
-export default function Home() {
+export default function Home({user}) {
   const buttonStyle = {
     backgroundColor: "blue",
     padding: "0.5rem 2rem",
@@ -18,8 +18,18 @@ export default function Home() {
         <div className="flex-auto">
           <Heading type="mainHeading">Code Sharing Application</Heading>
           <p>Upload or paste your code to share</p>
-          <div className="mt-2 flex flex-wrap gap-2">
+          <div className="mt-2 flex flex-wrap gap-2">{user ? (<>
             <Button style={buttonStyle}>
+              <Link href="/myfiles">
+                <a className="text-white">My files</a>
+              </Link>
+            </Button>
+            <Button style={buttonStyle}>
+              <Link href="/profile">
+                <a className="text-white">Profile</a>
+              </Link>
+            </Button>
+          </>) : (<><Button style={buttonStyle}>
               <Link href="/file/new">
                 <a className="text-white">Get started</a>
               </Link>
@@ -28,7 +38,8 @@ export default function Home() {
               <Link href="/signup">
                 <a className="text-white">Register with us</a>
               </Link>
-            </Button>
+            </Button></>)}
+            
           </div>
         </div>
       </div>
