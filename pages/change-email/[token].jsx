@@ -10,8 +10,7 @@ export default function ({ setAlert, setUser }) {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(true);
   const [success, setSuccess] = useState();
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirm] = useState("");
+  const [email, setEmail] = useState("");
   const token = router.query.token || null;
 
   useEffect(() => {
@@ -19,7 +18,7 @@ export default function ({ setAlert, setUser }) {
     setLoading(true);
 
     axios
-      .get(`/api/auth/reset-password/${token}`)
+      .get(`/api/auth/change-email/${token}`)
       .then((res) => {
         console.log(res.data);
         setSuccess(true);
@@ -36,37 +35,20 @@ export default function ({ setAlert, setUser }) {
   const submit = (e) => {
     e.preventDefault();
 
-    let error = {};
-    let isError = false;
-
-    if (password.length < 8) {
-      error.password = "Password length must be at least 8";
-      isError = true;
-    }
-
-    if (password !== confirmPassword) {
-      error.confirmPassword = "Passwords do not match!";
-      isError = true;
-    }
-
-    setErrors(error);
-
     const data = {
-      newPassword: password,
+      email,
     };
 
-    if (!isError) {
-      axios.post(`/api/auth/reset-password/${token}`, data).then((res) => {
+      axios.post(`/api/auth/change-email/${token}`, data).then((res) => {
         localStorage.removeItem("user")
         setUser(null)
         router.push("/login");
-        setAlert("Password successfully changed! You can now try to log in.");
+        setAlert("Email changed! You can now try to log in.");
         setTimeout(() => {
           setAlert(null);
         }, 5000);
       });
-    }
-  };
+    };
   return (
     <Container>
       <div
@@ -79,21 +61,12 @@ export default function ({ setAlert, setUser }) {
           <Paper className="p-4 pt-0 w-full lg:w-96">
             <Heading type="sectionHeading">Reset Password</Heading>
             <form onSubmit={submit} autoComplete="off">
-              <div className="w-full mt-3">
-                <Input
-                  label="New password"
-                  error={errors.password ? errors.password : null}
-                  setValue={setPassword}
-                  type="password"
-                />
-              </div>
-
               <div className="w-full my-3">
                 <Input
-                  label="Confirm password"
-                  error={errors.confirmPassword ? errors.confirmPassword : null}
-                  setValue={setConfirm}
-                  type="password"
+                  label="New Email"
+                  setValue={setEmail}
+                  type="email"
+                  required
                 />
               </div>
 
@@ -102,7 +75,7 @@ export default function ({ setAlert, setUser }) {
                 className="text-white text-bold"
                 type="submit"
               >
-                Reset Password
+                Change Email
               </Button>
             </form>
           </Paper>

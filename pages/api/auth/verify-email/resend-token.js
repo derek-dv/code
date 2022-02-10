@@ -8,12 +8,12 @@ dbConnect();
 export default async function (req, res) {
   switch (req.method) {
     case "POST":
-      const { user_id } = req.body;
+      const { email } = req.body;
       const userToken = crypto.randomBytes(16).toString("hex");
-      const user = await User.findOne({ _id: user_id });
+      const user = await User.findOne({ email });
       if (user) {
         const updated = await User.findOneAndUpdate(
-          { _id: user_id },
+          { email },
           {
             verifyToken: userToken,
             verifyTokenCreateDate: Date.now(),
@@ -27,16 +27,17 @@ export default async function (req, res) {
           html: `<h1>Email Verification</h1>
                   <p>You have made a request to resend the email Verification linkk.
                   Please click the link below to verify the account</p>
-                  <a href="http://works.codemash.me/verify-token/${modifiedUser.verifyToken}">Verify Token</a>`,
+                  <a href="http://code-a.herokuapp.com/verify-token/${modifiedUser.verifyToken}">Verify Token</a>`,
         };
         transporter.sendMail(mailOptions, (err, data) => {
           if (err) {
             console.log(err);
           }
         });
+        console.log(updated)
         res.send({ updated });
       }
-      console.log(user_id);
+      console.log(email);
       res.status(404).json({ error: "user not found" });
       break;
     default:

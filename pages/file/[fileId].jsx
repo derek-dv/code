@@ -5,7 +5,6 @@ import { Container, Input, Button, Select, MenuItem } from "@material-ui/core";
 import { useState, useEffect } from "react";
 // Components
 import Heading from "../../components/UI/Heading";
-import { files } from "../../dummy";
 
 import Editor from "@monaco-editor/react";
 

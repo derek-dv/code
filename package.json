@@ -10,10 +10,6 @@
     "prettier-watch": "onchange \"**/*\" -- prettier --write --ignore-unknown {{changed}}"
   },
   "dependencies": {
-    "@devexpress/dx-core": "^3.0.0",
-    "@devexpress/dx-react-core": "^3.0.0",
-    "@devexpress/dx-react-grid": "^3.0.0",
-    "@devexpress/dx-react-grid-material-ui": "^3.0.0",
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
     "@headlessui/react": "^1.4.3",

@@ -15,18 +15,14 @@ export default async function (req, res) {
       console.log(req.header);
       if (user) {
         if (bcrypt.compareSync(req.body.password, user.password)) {
-          if (user.verified) {
             res.status(200).json({
               user_id: user._id,
               username: user.username,
               email: user.email,
               jwtToken: generateToken(user),
+              verified: user.verified
             });
-            return;
-          } else {
-            res.status(400).json({ error: "Please verify your email" });
-            return;
-          }
+            return 
         }
         res.status(401).json({ error: "Invalid email or password" });
       }

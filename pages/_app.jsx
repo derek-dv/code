@@ -28,11 +28,11 @@ function MyApp({ Component, pageProps }) {
     }
   }, []);
 
-  useEffect(()=>{
-    setTimeout(()=>{
-      setAlert(null)
-    }, 10000)
-  }, [alert])
+  useEffect(() => {
+    setTimeout(() => {
+      setAlert(null);
+    }, 10000);
+  }, [alert]);
 
   return (
     <>

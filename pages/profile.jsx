@@ -10,7 +10,7 @@ export default function ({ setAlert, user }) {
   const [profile, setProfile] = useState();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState();
-
+  const [files, setFiles] = useState();
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [address, setAddress] = useState("");
@@ -25,7 +25,10 @@ export default function ({ setAlert, user }) {
       axios
         .get(`/api/profile/${user.user_id}`)
         .then((res) => {
-          setProfile(res.data.profile);
+          axios.get(`api/files/author/${user.user_id}`).then((resolve)=>{
+            setFiles(resolve.data)
+            console.log(resolve.data)
+            setProfile(res.data.profile);
           let profile = res.data.profile;
           setFirstName(profile.firstName);
           setLastName(profile.lastName);
@@ -35,6 +38,9 @@ export default function ({ setAlert, user }) {
           setDescription(profile.description);
           setError(false);
           setLoading(false);
+          }).catch((err)=>{
+            console.log(err)
+          })
         })
         .catch((err) => {
           setError(true);
@@ -106,6 +112,33 @@ export default function ({ setAlert, user }) {
     }
   };
 
+  const handleChangePassword = () => {
+    axios.post(`/api/auth/reset-password`, {email: user.email}).then((res)=>{
+      console.log(res.data)
+      setAlert("Check your Email for further steps")
+    }).catch((err)=>{
+      console.log(err)
+    })
+  }
+
+  const handleVerifyToken = () => {
+    axios.post(`/api/auth/verify-email/resend-token`, {email: user.email}).then((res)=>{
+      console.log(res.data)
+      setAlert("Check your Email for further steps")
+    }).catch((err)=>{
+      console.log(err)
+    })
+  }
+
+  const handleChangeEmail= () =>{
+    axios.post(`/api/auth/change-email`, {email: user.email}).then((res)=>{
+      console.log(res.data)
+      setAlert("Check your Email for further steps")
+    }).catch((err)=>{
+      console.log(err)
+    })
+  }
+
   const profileForm = (
     <div
       style={{ padding: "6rem 0" }}
@@ -163,7 +196,7 @@ export default function ({ setAlert, user }) {
             className="text-white text-bold"
             type="submit"
           >
-            Send Reset Link
+            Create profile
           </Button>
         </form>
       </Paper>
@@ -208,12 +241,9 @@ export default function ({ setAlert, user }) {
           </div>
 
           <div className="profile-details">
-            <h3>Files Uploaded</h3>
-            <p>X files Uploaded by user</p>
-
             <div className="profile-section">
               <h3 className="font-bold">Personal Information</h3>
-              <div className="profile-item flex">
+              <div className="flex gap-3 flex gap-3">
                 <label>First name</label>
                 <Input
                   onChange={(e) => setFirstName(e.target.value)}
@@ -222,7 +252,7 @@ export default function ({ setAlert, user }) {
                   label="name"
                 />
               </div>
-              <div className="profile-item">
+              <div className="flex gap-3">
                 <label>Last name</label>
                 <Input
                   onChange={(e) => setLastName(e.target.value)}
@@ -231,7 +261,7 @@ export default function ({ setAlert, user }) {
                   label="name"
                 />
               </div>
-              <div className="profile-item">
+              <div className="flex gap-3">
                 <label>Address</label>
                 <Input
                   onChange={(e) => setAddress(e.target.value)}
@@ -240,7 +270,7 @@ export default function ({ setAlert, user }) {
                   label="Address"
                 />
               </div>
-              <div className="profile-item">
+              <div className="flex gap-3">
                 <label>City</label>
                 <Input
                   value={city}
@@ -249,7 +279,7 @@ export default function ({ setAlert, user }) {
                   label="City"
                 />
               </div>
-              <div className="profile-item">
+              <div className="flex gap-3">
                 <label>Country</label>
                 <Input
                   value={country}
@@ -270,6 +300,57 @@ export default function ({ setAlert, user }) {
                 </Button>
               )}
             </div>
+            <div className="profile-section">
+            <h2 className="text-lg font-bold">Account Information</h2>
+              <div className="flex gap-3 space-between mb-2">
+                <p style={{minWidth: "15rem"}}>Number of files uploaded</p>
+                <p>{files.totalFiles}</p> 
+              </div>
+
+              <div className="flex gap-3 space-between mb-2">
+                <p style={{minWidth: "15rem"}}>Total file size</p>
+                <p>{files.fileSize}KB</p> 
+              </div>
+
+              <div className="flex gap-3 space-between mb-2">
+                <p style={{minWidth: "15rem"}}>Email</p>
+                <p>{user.email}</p>
+                <Button
+                  onClick={handleChangeEmail}
+                  style={{
+                    backgroundColor: "blue",
+                  }}
+                >
+                  Change Email
+                </Button>
+              </div>
+
+              <div className="flex gap-3 space-between mb-2">
+                <p style={{minWidth: "15rem"}}>Password</p>
+                <p>.............</p>
+                <Button
+                  onClick={handleChangePassword}
+                  style={{
+                    backgroundColor: "blue",
+                  }}
+                >
+                  Change Password
+                </Button>
+              </div>
+
+              <div className="flex gap-3 space-between mb-2">
+                <p style={{minWidth: "15rem"}}>Email verified</p>
+                <p>{user.verified ? 'Yes' : 'No'}</p>
+                {user.verified ? null : (<Button
+                  onClick={handleVerifyToken}
+                  style={{
+                    backgroundColor: "blue",
+                  }}
+                >
+                  Verify Email
+                </Button>)}
+              </div>
+          </div>
           </div>
         </>
       ) : (

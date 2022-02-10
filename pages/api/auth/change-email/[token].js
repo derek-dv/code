@@ -9,28 +9,29 @@ export default async function (req, res) {
   const token = req.query.token;
   switch (req.method) {
     case "POST":
-      const { newPassword } = req.body;
-      let user = await User.findOne({ resetPasswordToken: token });
-      if (user && !user.resetPasswordExpired()) {
+      const { email } = req.body;
+      let user = await User.findOne({ verifyToken: token });
+      if (user) {
         console.log(req.body);
         const modifiedUser = await User.findOneAndUpdate(
-          { resetPasswordToken: token },
+          { verifyToken: token },
           {
-            password: bcrypt.hashSync(newPassword, 8),
+            email,
+            verified: false
           },
           {
             new: true,
           }
         );
-        modifiedUser.save();
-        res.json({ message: "password successfully changed" });
+        modifiedUser = await modifiedUser.save();
+        res.json({ message: "Email successfully changed" });
       } else {
         res.status(404).json({ error: "token not found" });
       }
       break;
 
     case "GET":
-      let users = await User.findOne({ resetPasswordToken: token });
+      let users = await User.findOne({ verifyToken: token });
       console.log(token);
       console.log(users);
       if (users) {
