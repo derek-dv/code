@@ -34,7 +34,7 @@ export default async function (req, res) {
             console.log(err);
           }
         });
-        console.log(updated)
+        console.log(updated);
         res.send({ updated });
       }
       console.log(email);

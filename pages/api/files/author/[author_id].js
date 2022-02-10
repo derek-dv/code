@@ -12,9 +12,9 @@ export default async (req, res) => {
       try {
         const file = await File.find({ author_id: id });
         console.log(file);
-        const totalFiles = file.length
-        const fileSize = file.reduce((a, c) => a + Number(c.fileSize), 0)
-        console.log(fileSize)
+        const totalFiles = file.length;
+        const fileSize = file.reduce((a, c) => a + Number(c.fileSize), 0);
+        console.log(fileSize);
         res.status(200).json({ files: file, totalFiles, fileSize });
       } catch (error) {
         console.log(id);

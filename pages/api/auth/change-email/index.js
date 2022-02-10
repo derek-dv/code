@@ -37,7 +37,7 @@ export default async function (req, res) {
         });
 
         modifiedUser.save();
-        console.log(modifiedUser)
+        console.log(modifiedUser);
         res.json({ modifiedUser });
       } else {
         res.status(404).json({ error: "User does not exist" });

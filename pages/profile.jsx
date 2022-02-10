@@ -25,22 +25,25 @@ export default function ({ setAlert, user }) {
       axios
         .get(`/api/profile/${user.user_id}`)
         .then((res) => {
-          axios.get(`api/files/author/${user.user_id}`).then((resolve)=>{
-            setFiles(resolve.data)
-            console.log(resolve.data)
-            setProfile(res.data.profile);
-          let profile = res.data.profile;
-          setFirstName(profile.firstName);
-          setLastName(profile.lastName);
-          setAddress(profile.address);
-          setCity(profile.city);
-          setCountry(profile.country);
-          setDescription(profile.description);
-          setError(false);
-          setLoading(false);
-          }).catch((err)=>{
-            console.log(err)
-          })
+          axios
+            .get(`api/files/author/${user.user_id}`)
+            .then((resolve) => {
+              setFiles(resolve.data);
+              console.log(resolve.data);
+              setProfile(res.data.profile);
+              let profile = res.data.profile;
+              setFirstName(profile.firstName);
+              setLastName(profile.lastName);
+              setAddress(profile.address);
+              setCity(profile.city);
+              setCountry(profile.country);
+              setDescription(profile.description);
+              setError(false);
+              setLoading(false);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
         })
         .catch((err) => {
           setError(true);
@@ -113,31 +116,40 @@ export default function ({ setAlert, user }) {
   };
 
   const handleChangePassword = () => {
-    axios.post(`/api/auth/reset-password`, {email: user.email}).then((res)=>{
-      console.log(res.data)
-      setAlert("Check your Email for further steps")
-    }).catch((err)=>{
-      console.log(err)
-    })
-  }
+    axios
+      .post(`/api/auth/reset-password`, { email: user.email })
+      .then((res) => {
+        console.log(res.data);
+        setAlert("Check your Email for further steps");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const handleVerifyToken = () => {
-    axios.post(`/api/auth/verify-email/resend-token`, {email: user.email}).then((res)=>{
-      console.log(res.data)
-      setAlert("Check your Email for further steps")
-    }).catch((err)=>{
-      console.log(err)
-    })
-  }
+    axios
+      .post(`/api/auth/verify-email/resend-token`, { email: user.email })
+      .then((res) => {
+        console.log(res.data);
+        setAlert("Check your Email for further steps");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
-  const handleChangeEmail= () =>{
-    axios.post(`/api/auth/change-email`, {email: user.email}).then((res)=>{
-      console.log(res.data)
-      setAlert("Check your Email for further steps")
-    }).catch((err)=>{
-      console.log(err)
-    })
-  }
+  const handleChangeEmail = () => {
+    axios
+      .post(`/api/auth/change-email`, { email: user.email })
+      .then((res) => {
+        console.log(res.data);
+        setAlert("Check your Email for further steps");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const profileForm = (
     <div
@@ -301,19 +313,19 @@ export default function ({ setAlert, user }) {
               )}
             </div>
             <div className="profile-section">
-            <h2 className="text-lg font-bold">Account Information</h2>
+              <h2 className="text-lg font-bold">Account Information</h2>
               <div className="flex gap-3 space-between mb-2">
-                <p style={{minWidth: "15rem"}}>Number of files uploaded</p>
-                <p>{files.totalFiles}</p> 
+                <p style={{ minWidth: "15rem" }}>Number of files uploaded</p>
+                <p>{files.totalFiles}</p>
               </div>
 
               <div className="flex gap-3 space-between mb-2">
-                <p style={{minWidth: "15rem"}}>Total file size</p>
-                <p>{files.fileSize}KB</p> 
+                <p style={{ minWidth: "15rem" }}>Total file size</p>
+                <p>{files.fileSize}KB</p>
               </div>
 
               <div className="flex gap-3 space-between mb-2">
-                <p style={{minWidth: "15rem"}}>Email</p>
+                <p style={{ minWidth: "15rem" }}>Email</p>
                 <p>{user.email}</p>
                 <Button
                   onClick={handleChangeEmail}
@@ -326,7 +338,7 @@ export default function ({ setAlert, user }) {
               </div>
 
               <div className="flex gap-3 space-between mb-2">
-                <p style={{minWidth: "15rem"}}>Password</p>
+                <p style={{ minWidth: "15rem" }}>Password</p>
                 <p>.............</p>
                 <Button
                   onClick={handleChangePassword}
@@ -339,18 +351,20 @@ export default function ({ setAlert, user }) {
               </div>
 
               <div className="flex gap-3 space-between mb-2">
-                <p style={{minWidth: "15rem"}}>Email verified</p>
-                <p>{user.verified ? 'Yes' : 'No'}</p>
-                {user.verified ? null : (<Button
-                  onClick={handleVerifyToken}
-                  style={{
-                    backgroundColor: "blue",
-                  }}
-                >
-                  Verify Email
-                </Button>)}
+                <p style={{ minWidth: "15rem" }}>Email verified</p>
+                <p>{user.verified ? "Yes" : "No"}</p>
+                {user.verified ? null : (
+                  <Button
+                    onClick={handleVerifyToken}
+                    style={{
+                      backgroundColor: "blue",
+                    }}
+                  >
+                    Verify Email
+                  </Button>
+                )}
               </div>
-          </div>
+            </div>
           </div>
         </>
       ) : (

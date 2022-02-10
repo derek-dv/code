@@ -17,7 +17,7 @@ export default async function (req, res) {
           { verifyToken: token },
           {
             email,
-            verified: false
+            verified: false,
           },
           {
             new: true,

@@ -39,16 +39,16 @@ export default function ({ setAlert, setUser }) {
       email,
     };
 
-      axios.post(`/api/auth/change-email/${token}`, data).then((res) => {
-        localStorage.removeItem("user")
-        setUser(null)
-        router.push("/login");
-        setAlert("Email changed! You can now try to log in.");
-        setTimeout(() => {
-          setAlert(null);
-        }, 5000);
-      });
-    };
+    axios.post(`/api/auth/change-email/${token}`, data).then((res) => {
+      localStorage.removeItem("user");
+      setUser(null);
+      router.push("/login");
+      setAlert("Email changed! You can now try to log in.");
+      setTimeout(() => {
+        setAlert(null);
+      }, 5000);
+    });
+  };
   return (
     <Container>
       <div

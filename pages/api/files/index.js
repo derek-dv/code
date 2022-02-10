@@ -17,13 +17,13 @@ async function Files(req, res) {
         const token = authorization.slice(7, authorization.length);
         const user = jwt.verify(token, process.env.JWT_SECRET);
 
-        const fileSize = Number(Buffer.byteLength(code, "utf8")) / 1000
+        const fileSize = Number(Buffer.byteLength(code, "utf8")) / 1000;
         const file = new File({
           fileName: req.body.fileName,
           language: req.body.language,
           author_id: req.body.author_id,
           code: req.body.code,
-          fileSize
+          fileSize,
         });
 
         const createdFile = await file.save();
@@ -31,15 +31,15 @@ async function Files(req, res) {
         return;
       } catch (err) {
         const { code } = req.body;
-        const fileSize = Number(Buffer.byteLength(code, "utf8")) / 1000
-        console.log(fileSize)
+        const fileSize = Number(Buffer.byteLength(code, "utf8")) / 1000;
+        console.log(fileSize);
         if (fileSize < 200) {
           const file = new File({
             fileName: req.body.fileName,
             language: req.body.language,
             author_id: req.body.author_id,
             code: req.body.code,
-            fileSize
+            fileSize,
           });
 
           const createdFile = await file.save();

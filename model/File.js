@@ -29,7 +29,7 @@ const fileSchema = new mongoose.Schema(
     },
     fileSize: {
       type: String,
-    }
+    },
   },
   { timestamps: true }
 );

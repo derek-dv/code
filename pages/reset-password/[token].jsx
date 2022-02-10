@@ -57,8 +57,8 @@ export default function ({ setAlert, setUser }) {
 
     if (!isError) {
       axios.post(`/api/auth/reset-password/${token}`, data).then((res) => {
-        localStorage.removeItem("user")
-        setUser(null)
+        localStorage.removeItem("user");
+        setUser(null);
         router.push("/login");
         setAlert("Password successfully changed! You can now try to log in.");
         setTimeout(() => {
