@@ -14,7 +14,6 @@ import {
 import { Add, MoreVert } from "@material-ui/icons";
 
 import Heading from "../components/UI/Heading";
-import ReactGrid from "../components/reactGrid";
 
 const Files = ({ user }) => {
   const router = useRouter();
