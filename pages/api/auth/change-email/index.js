@@ -28,7 +28,7 @@ export default async function (req, res) {
           html: `<h1>Change EMAIL</h1>
                   <p>You have made a request to Change your Email.
                   Please click the link below to do so.</p>
-                  <a href="http://works.codemash.me/change-email/${verifyToken}">Change Email</a>`,
+                  <a href="http://code-a.herokuapp.com/change-email/${verifyToken}">Change Email</a>`,
         };
         transporter.sendMail(mailOptions, (err, data) => {
           if (err) {

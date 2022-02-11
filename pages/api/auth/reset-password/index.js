@@ -30,7 +30,7 @@ export default async function (req, res) {
           html: `<h1>Reset password</h1>
                   <p>You have made a request to reset password.
                   Please click the link below to do so.</p>
-                  <a href="http://works.codemash.me/reset-password/${resetPasswordToken}">Reset password</a>`,
+                  <a href="http://code-a.herokuapp.com/reset-password/${resetPasswordToken}">Reset password</a>`,
         };
         transporter.sendMail(mailOptions, (err, data) => {
           if (err) {
