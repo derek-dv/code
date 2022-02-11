@@ -13,7 +13,6 @@ export default async function (req, res) {
       const resetPasswordToken = crypto.randomBytes(16).toString("hex");
       const user = await User.findOne({ email });
       if (user) {
-        console.log(user);
         let modifiedUser = await User.findOneAndUpdate(
           { email },
           {
@@ -37,6 +36,7 @@ export default async function (req, res) {
             console.log(err);
           }
         });
+        console.log(modifiedUser)
 
         modifiedUser.save();
         res.json({ modifiedUser });

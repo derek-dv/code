@@ -42,8 +42,8 @@ export default function ({ setAlert, setUser }) {
     axios.post(`/api/auth/change-email/${token}`, data).then((res) => {
       localStorage.removeItem("user");
       setUser(null);
-      router.push("/login");
       setAlert("Email changed! You can now try to log in.");
+      router.push('/login')
       setTimeout(() => {
         setAlert(null);
       }, 5000);

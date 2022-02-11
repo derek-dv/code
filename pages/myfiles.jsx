@@ -70,7 +70,6 @@ const Files = ({ user }) => {
         </div>
       </div>
       <div className="">
-        user
         {loading ? (
           <p>Loading</p>
         ) : (

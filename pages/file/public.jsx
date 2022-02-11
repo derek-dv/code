@@ -55,36 +55,46 @@ const Files = () => {
           </Button>
         </div>
       </div>
-      <div className="flex gap-4 flex-wrap">
+      <div className="">
         {loading ? (
           <p>Loading</p>
         ) : (
-          files.map((file) => (
-            <Card
-              style={{
-                width: "15rem",
-                height: "19rem",
-              }}
-            >
-              <Link href={`/file/${file._id}`}>
-                <a>
-                  <img
-                    style={{
-                      maxWidth: "15rem",
-                      minHeight: "17rem",
-                    }}
-                    src="/code2.jpg"
-                  />
-                </a>
-              </Link>
-
-              <div className="mx-2 flex justify-between items center">
-                <p className="h-full my-auto text-sm font-bold text-gray-800">
-                  {file.fileName}
-                </p>
-              </div>
-            </Card>
-          ))
+          <table id="customers">
+            <thead>
+              <tr>
+                <th>Index</th>
+                <th>ID</th>
+                <th>Name</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {files
+                ? files.map((file, index) => (
+                    <tr>
+                      <td>{index}</td>
+                      <td>{file._id}</td>
+                      <td>{file.fileName}</td>
+                      <td>
+                        <>
+                          <Link href={`/file/${file._id}`}>
+                            <Button
+                              style={{
+                                backgroundColor: "blue",
+                                marginRight: "2rem",
+                              }}
+                            >
+                              View
+                            </Button>
+                          </Link>
+                          
+                        </>
+                      </td>
+                    </tr>
+                  ))
+                : null}
+            </tbody>
+          </table>
         )}
       </div>
     </Container>
