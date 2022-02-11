@@ -17,7 +17,7 @@ export default async function (req, res) {
           {
             verifyToken: userToken,
             verifyTokenCreateDate: Date.now(),
-          }
+          }, {new: true}
         );
         updated.save();
         const mailOptions = {
@@ -27,7 +27,7 @@ export default async function (req, res) {
           html: `<h1>Email Verification</h1>
                   <p>You have made a request to resend the email Verification linkk.
                   Please click the link below to verify the account</p>
-                  <a href="http://code-a.herokuapp.com/verify-token/${modifiedUser.verifyToken}">Verify Token</a>`,
+                  <a href="http://code-a.herokuapp.com/verify-token/${userToken}">Verify Token</a>`,
         };
         transporter.sendMail(mailOptions, (err, data) => {
           if (err) {
