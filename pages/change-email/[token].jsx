@@ -73,6 +73,7 @@ export default function ({ setAlert, setUser }) {
               <Button
                 style={{ backgroundColor: "blue", padding: "0.5rem 1rem" }}
                 className="text-white text-bold"
+                onClick={submit}
                 type="submit"
               >
                 Change Email
