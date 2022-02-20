@@ -18,6 +18,7 @@
     "@material-ui/icons": "^4.11.2",
     "@monaco-editor/react": "^4.3.1",
     "@mui/material": "^5.4.0",
+"@azure/msal-browser": "*",
     "axios": "^0.21.4",
     "bcrypt": "^5.0.1",
     "gapi-script": "^1.2.0",
