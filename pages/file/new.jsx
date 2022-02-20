@@ -6,8 +6,20 @@ import { Button, Container, Input, Select, MenuItem } from "@material-ui/core";
 import { useState } from "react";
 import Heading from "../../components/UI/Heading";
 import Editor from "@monaco-editor/react";
+import dynamic from "next/dynamic";
 
-const NewFile = ({ user }) => {
+const GoogleImport = dynamic(() => import("../../components/googleImport"), {
+  ssr: false,
+});
+
+const OneDriveImport = dynamic(
+  () => import("../../components/onedriveImport"),
+  {
+    ssr: false,
+  }
+);
+
+const NewFile = ({ user, setAlert }) => {
   const router = useRouter();
   const [fileName, setFileName] = useState("");
   const [language, setLanguage] = useState("javascript");
@@ -107,21 +119,16 @@ const NewFile = ({ user }) => {
             onChange={handleEditorChange}
           />
           <div className="mt-5">
-            <Button
-              style={{
-                backgroundColor: "red",
-                marginRight: "2rem",
-              }}
-            >
-              import from Google Drive
-            </Button>
-            <Button
-              style={{
-                backgroundColor: "blue",
-              }}
-            >
-              import from Microsoft Drive
-            </Button>
+            <GoogleImport
+              setCode={setCode}
+              setName={setFileName}
+              setAlert={setAlert}
+            />
+            <OneDriveImport
+              setCode={setCode}
+              setName={setFileName}
+              setAlert={setAlert}
+            />
           </div>
         </div>
       </Container>

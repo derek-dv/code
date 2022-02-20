@@ -66,7 +66,7 @@ const Login = ({ setAlert, setUser, user }) => {
         })
         .catch((err) => {
           setLoading(false);
-          setPassword('')
+          setPassword("");
           console.log(err);
           if (err.response.data.error) setLoginError(err.response.data.error);
         });

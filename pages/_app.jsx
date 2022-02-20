@@ -1,6 +1,7 @@
 import Head from "next/head";
 import crypto from "crypto";
 import { useState, useEffect } from "react";
+import { appWithTranslation } from "next-i18next";
 
 // Components
 import Layout from "../components/Layout";
@@ -56,4 +57,4 @@ function MyApp({ Component, pageProps }) {
   );
 }
 
-export default MyApp;
+export default appWithTranslation(MyApp);

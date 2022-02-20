@@ -36,7 +36,7 @@ export default async function (req, res) {
             console.log(err);
           }
         });
-        console.log(modifiedUser)
+        console.log(modifiedUser);
 
         modifiedUser.save();
         res.json({ modifiedUser });

@@ -17,7 +17,8 @@ export default async function (req, res) {
           {
             verifyToken: userToken,
             verifyTokenCreateDate: Date.now(),
-          }, {new: true}
+          },
+          { new: true }
         );
         updated.save();
         const mailOptions = {

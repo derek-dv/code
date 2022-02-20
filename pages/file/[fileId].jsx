@@ -1,11 +1,14 @@
 import Head from "next/head";
 import axios from "axios";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { Container, Input, Button, Select, MenuItem } from "@material-ui/core";
 import { useState, useEffect } from "react";
 // Components
 import Heading from "../../components/UI/Heading";
-
+const GoogleExport = dynamic(() => import("../../components/googleExport"), {
+  ssr: false,
+});
 import Editor from "@monaco-editor/react";
 
 const NewFile = ({ user, setAlert }) => {
@@ -168,14 +171,7 @@ const NewFile = ({ user, setAlert }) => {
               onChange={handleEditorChange}
             />
             <div className="">
-              <Button
-                style={{
-                  backgroundColor: "red",
-                  marginRight: "2rem",
-                }}
-              >
-                Export to Google Drive
-              </Button>
+              <GoogleExport code={code} name={name} setAlert={setAlert} />
               <Button
                 style={{
                   backgroundColor: "blue",

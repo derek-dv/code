@@ -43,7 +43,7 @@ export default function ({ setAlert, setUser }) {
       localStorage.removeItem("user");
       setUser(null);
       setAlert("Email changed! You can now try to log in.");
-      router.push('/login')
+      router.push("/login");
       setTimeout(() => {
         setAlert(null);
       }, 5000);
