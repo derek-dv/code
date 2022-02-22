@@ -2,17 +2,20 @@ import { Button } from "@material-ui/core";
 import axios from "axios";
 import { useState } from "react";
 import { PublicClientApplication } from "@azure/msal-browser";
+import FileModal from "./oneDriveModal";
 
 const ms_graph = "https://graph.microsoft.com/v1.0";
 const APP_ID = "8d22d168-17c6-49f9-8118-57c7d5aa2a5d";
 const REDIRECT_URI = "http://localhost:3000";
 const SCOPES = ["Files.ReadWrite"];
 
-export default function () {
+export default function ({ setCode, setName, setAlert }) {
   const [error, setError] = useState(null);
   const [isAth, setIsAuth] = useState(false);
   const [user, setUser] = useState({});
-  let accessToken;
+  const [files, setFiles] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [accessToken, setAccessToken] = useState();
 
   async function login() {
     const publicClient = new PublicClientApplication({
@@ -40,7 +43,7 @@ export default function () {
     publicClient
       .acquireTokenSilent(accessTokenRequest)
       .then((accessTokenResponse) => {
-        accessToken = accessTokenResponse.accessToken;
+        setAccessToken(accessTokenResponse.accessToken);
         console.log(accessTokenResponse.accessToken);
         const config = {
           headers: {
@@ -50,7 +53,10 @@ export default function () {
         axios
           .get(`${ms_graph}/me/drive/root/children`, config)
           .then((res) => {
-            console.log(res);
+            console.log(res.data.value);
+            setFiles(res.data.value);
+            setUser(account.name);
+            setOpen(true);
           })
           .catch((err) => {
             console.log(err);
@@ -61,28 +67,29 @@ export default function () {
       });
   }
 
-  // const listFiles = () => {
-  // 	const config = {
-  // 		headers: {
-  // 		Authorization: `Bearer ${accessToken}`
-  // 	}}
-  // 	axios.get(`${ms_graph}/me/drive/items`, {}, config).then((res)=>{
-  // 		console.log(res)
-  // 	}).catch((err)=> {
-  // 		console.log(err)
-  // 	})
-  // }
-
   return (
-    <Button
-      onClick={() => {
-        login();
-      }}
-      style={{
-        backgroundColor: "blue",
-      }}
-    >
-      import from Microsoft Drive
-    </Button>
+    <>
+      <FileModal
+        open={open}
+        setOpen={setOpen}
+        files={files}
+        setCode={setCode}
+        setName={setName}
+        setAlert={setAlert}
+        token={accessToken}
+        setFiles={setFiles}
+        user={user}
+      />
+      <Button
+        onClick={() => {
+          login();
+        }}
+        style={{
+          backgroundColor: "blue",
+        }}
+      >
+        import from Microsoft Drive
+      </Button>
+    </>
   );
 }

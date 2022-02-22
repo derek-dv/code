@@ -9,6 +9,13 @@ import Heading from "../../components/UI/Heading";
 const GoogleExport = dynamic(() => import("../../components/googleExport"), {
   ssr: false,
 });
+const OneDriveExport = dynamic(
+  () => import("../../components/onedriveExport"),
+  {
+    ssr: false,
+  }
+);
+
 import Editor from "@monaco-editor/react";
 
 const NewFile = ({ user, setAlert }) => {
@@ -172,14 +179,7 @@ const NewFile = ({ user, setAlert }) => {
             />
             <div className="">
               <GoogleExport code={code} name={name} setAlert={setAlert} />
-              <Button
-                style={{
-                  backgroundColor: "blue",
-                }}
-                onClick={() => alert(code)}
-              >
-                Export to Microsoft Drive
-              </Button>
+              <OneDriveExport code={code} name={name} setAlert={setAlert} />
             </div>
           </div>
         </div>
