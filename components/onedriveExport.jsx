@@ -6,7 +6,7 @@ import { PublicClientApplication } from "@azure/msal-browser";
 
 const ms_graph = "https://graph.microsoft.com/v1.0";
 const APP_ID = "8d22d168-17c6-49f9-8118-57c7d5aa2a5d";
-const REDIRECT_URI = "https://code.herokuapp.com";
+const REDIRECT_URI = "https://code-a.herokuapp.com";
 const SCOPES = ["Files.ReadWrite"];
 
 export default function ({ code, name, setAlert }) {
