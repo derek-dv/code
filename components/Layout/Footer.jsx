@@ -26,10 +26,26 @@ export default function Footer() {
               onChange={(e) => setLanguage(e.target.value)}
               className="text-white"
             >
-              <MenuItem value="english"><Link href="#" locale={"en"}>English</Link></MenuItem>
-              <MenuItem value="french"><Link href="#" locale={"fr"}>French</Link></MenuItem>
-              <MenuItem value="cpp"><Link href="#" locale={"es"}>Spanish</Link></MenuItem>
-              <MenuItem value="html"><Link href="#" locale={"hi"}>Hindi</Link></MenuItem>
+              <MenuItem value="english">
+                <Link href="#" locale={"en"}>
+                  English
+                </Link>
+              </MenuItem>
+              <MenuItem value="french">
+                <Link href="#" locale={"fr"}>
+                  French
+                </Link>
+              </MenuItem>
+              <MenuItem value="cpp">
+                <Link href="#" locale={"es"}>
+                  Spanish
+                </Link>
+              </MenuItem>
+              <MenuItem value="html">
+                <Link href="#" locale={"hi"}>
+                  Hindi
+                </Link>
+              </MenuItem>
             </Select>
             <Link href="/">
               <a className="ml-3 text-blue-200 hover:text-blue-500 mr-2 cursor-pointer">

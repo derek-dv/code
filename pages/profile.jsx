@@ -1,4 +1,4 @@
-import { Container, Button, Paper } from "@material-ui/core";
+import { Container, Button, Paper, Modal } from "@material-ui/core";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
@@ -8,11 +8,29 @@ import Input from "../components/formInput";
 
 export default function ({ setAlert, user }) {
   const router = useRouter();
+  const [oldPassword, setOldPassword] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(true);
   const [files, setFiles] = useState();
   const [email, setEmail] = useState();
   const [changeEmail, setChange] = useState(false);
+  const [open, setOpen] = useState(false);
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: "60%",
+    border: "2px solid black",
+    padding: "4rem",
+    height: "18rem",
+    backgroundColor: "#eee",
+  };
 
   useEffect(() => {
     if (user) {
@@ -32,11 +50,10 @@ export default function ({ setAlert, user }) {
 
   const handleChangePassword = () => {
     axios
-      .post(`/api/auth/reset-password`, { email: user.email })
+      .post(`/api/auth/change-password`, { email: user.email, password, oldPassword })
       .then((res) => {
         console.log(res.data);
-        setAlert("Check your Email for further steps");
-        router.push("/changePassword");
+        setAlert("Your password hs been changed");
       })
       .catch((err) => {
         console.log(err);
@@ -75,6 +92,37 @@ export default function ({ setAlert, user }) {
     <Container className="mt-5">
       {user && !error ? (
         <>
+          <Modal
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <div style={style}>
+              <Heading type="sectionHeading" className="text-center">
+                Change Password
+              </Heading>
+              <form>
+                <div className="mt-2 mb-3">
+                  <Input
+                    type="password"
+                    label="Old Password"
+                    setValue={setOldPassword}
+                  />
+                </div>
+                <div className="mt-2 mb-3">
+                  <Input
+                    type="password"
+                    label="New Password"
+                    setValue={setPassword}
+                  />
+                </div>
+                <Button style={{ backgroundColor: "blue", color: "white" }} onClick={handleChangePassword}>
+                  Change Password
+                </Button>
+              </form>
+            </div>
+          </Modal>
           <Heading type="mainHeading" className="mb-3">
             Profile Page
           </Heading>
@@ -156,7 +204,7 @@ export default function ({ setAlert, user }) {
                 <td>
                   <Button
                     style={{ backgroundColor: "blue" }}
-                    onClick={handleChangePassword}
+                    onClick={() => setOpen(true)}
                   >
                     Change password
                   </Button>

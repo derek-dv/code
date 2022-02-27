@@ -10,6 +10,7 @@
     "prettier-watch": "onchange \"**/*\" -- prettier --write --ignore-unknown {{changed}}"
   },
   "dependencies": {
+    "@azure/msal-browser": "*",
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
     "@headlessui/react": "^1.4.3",
@@ -18,7 +19,6 @@
     "@material-ui/icons": "^4.11.2",
     "@monaco-editor/react": "^4.3.1",
     "@mui/material": "^5.4.0",
-    "@azure/msal-browser": "*",
     "axios": "^0.21.4",
     "bcrypt": "^5.0.1",
     "gapi-script": "^1.2.0",
@@ -37,6 +37,7 @@
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-hook-form": "^7.22.2",
+    "react-hot-toast": "^2.2.0",
     "react-loader-spinner": "^4.0.0",
     "react-monaco-editor": "^0.47.0",
     "redux": "^4.1.2",

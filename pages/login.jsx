@@ -30,6 +30,7 @@ const Login = ({ setAlert, setUser, user }) => {
 
   const submit = (e) => {
     e.preventDefault();
+    setLoading(true);
 
     let error = {};
 
@@ -50,7 +51,7 @@ const Login = ({ setAlert, setUser, user }) => {
     };
     console.log(!isError);
     if (!isError) {
-      setLoading(true);
+      // setLoading(true);
       axios
         .post("/api/auth/login", data)
         .then((res) => {
@@ -67,9 +68,11 @@ const Login = ({ setAlert, setUser, user }) => {
         .catch((err) => {
           setLoading(false);
           setPassword("");
-          console.log(err);
+          setLoading(false);
           if (err.response.data.error) setLoginError(err.response.data.error);
         });
+      setLoading(false);
+    } else {
       setLoading(false);
     }
   };
@@ -80,6 +83,7 @@ const Login = ({ setAlert, setUser, user }) => {
         className="flex items-center justify-center flex-col"
       >
         {loginError ? <Alert variant="error" text={loginError} /> : null}
+        {loading ? "loading" : ""}
         <Paper className="p-4 pt-0 w-full lg:w-96">
           <Heading type="sectionHeading">Login</Heading>
           <form onSubmit={submit} autoComplete="off">

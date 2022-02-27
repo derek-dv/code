@@ -14,17 +14,17 @@ export default function ({ code, name, setAlert }) {
   const [open, setOpen] = useState();
   const [accessToken, setAccessToken] = useState();
   const style = {
-      position: "absolute",
-      top: "50%",
-      left: "50%",
-      transform: "translate(-50%, -50%)",
-      width: "80%",
-      border: "2px solid black",
-      padding: "4rem",
-      overflow: "scroll",
-      height: "28rem",
-      backgroundColor: "#eee",
-    };
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: "80%",
+    border: "2px solid black",
+    padding: "4rem",
+    overflow: "scroll",
+    height: "28rem",
+    backgroundColor: "#eee",
+  };
   async function login() {
     const publicClient = new PublicClientApplication({
       auth: {
@@ -44,7 +44,6 @@ export default function ({ code, name, setAlert }) {
 
     const account = publicClient.getAllAccounts()[0];
 
-    
     const accessTokenRequest = {
       scopes: SCOPES,
       account: account,
@@ -54,8 +53,8 @@ export default function ({ code, name, setAlert }) {
       .then((accessTokenResponse) => {
         setAccessToken(accessTokenResponse.accessToken);
         console.log(accessTokenResponse.accessToken);
-        setOpen(true)
-        setUser(account.name)
+        setOpen(true);
+        setUser(account.name);
       })
       .catch((err) => {
         console.log(err);
@@ -95,11 +94,15 @@ export default function ({ code, name, setAlert }) {
               };
 
               axios
-                .put(`${ms_graph}/me/drive/root:/${name}:/content`, file, config)
+                .put(
+                  `${ms_graph}/me/drive/root:/${name}:/content`,
+                  file,
+                  config
+                )
                 .then((res) => {
                   console.log(res);
                   setOpen(false);
-                  setAlert("File uploaded")
+                  setAlert("File uploaded");
                 })
                 .catch((err) => {
                   console.log(err);
