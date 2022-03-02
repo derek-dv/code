@@ -13,7 +13,6 @@ import "../styles/globals.css";
 function MyApp({ Component, pageProps }) {
   const [alert, setAlert] = useState();
   const [user, setUser] = useState();
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!localStorage.getItem("user") && !localStorage.getItem("guestId")) {
@@ -45,7 +44,7 @@ function MyApp({ Component, pageProps }) {
         />
       </Head>
       <Layout user={user}>
-        {alert ? <Alert varient="success" text={alert} /> : null}
+        {alert ? <Alert variant="success" text={alert} /> : null}
         <Component
           user={user}
           setAlert={setAlert}

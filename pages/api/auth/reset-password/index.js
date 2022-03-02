@@ -21,6 +21,7 @@ export default async function (req, res) {
           },
           { new: true }
         );
+        console.log(resetPasswordToken)
 
         const mailOptions = {
           to: email,

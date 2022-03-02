@@ -1,5 +1,3 @@
-import bcrypt from "bcrypt";
-import crypto from "crypto";
 import dbConnect from "../../../../utils/dbconnect";
 import User from "../../../../model/User";
 

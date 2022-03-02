@@ -6,7 +6,7 @@ import CustomInput from "../components/formInput";
 import Heading from "../components/UI/Heading";
 import Input from "../components/formInput";
 
-export default function ({ setAlert, user }) {
+export default function ({ setAlert, user, setUser}) {
   const router = useRouter();
   const [oldPassword, setOldPassword] = useState("");
   const [password, setPassword] = useState("");
@@ -77,11 +77,18 @@ export default function ({ setAlert, user }) {
 
   const handleChangeEmail = () => {
     axios
-      .post(`/api/auth/change-email`, { email: user.email })
+      .post(`/api/auth/change-email`, { _id: user.user_id, email })
       .then((res) => {
         console.log(res.data);
-        setAlert("Check your Email for further steps");
-        router.push("/changeEmail");
+        setEmail(email)
+        const newUser = {
+          ...user,
+          email: email
+        }
+        localStorage.setItem("user", JSON.stringify(newUser))
+        setUser(newUser)
+        setChange(false)
+        setAlert("Your Email has been changed!");
       })
       .catch((err) => {
         console.log(err);
@@ -151,11 +158,11 @@ export default function ({ setAlert, user }) {
                 {changeEmail ? (
                   <>
                     <td>
-                      <Input type="email" label={email} setValue={setEmail} />
+                      <Input type="email" label={"Email"} setValue={setEmail} />
                     </td>
                     <td>
                       <Button
-                        onClick={() => handleChangeEmail}
+                        onClick={() => handleChangeEmail()}
                         style={{ backgroundColor: "blue", marginRight: "1rem" }}
                       >
                         Change

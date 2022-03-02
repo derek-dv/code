@@ -1,14 +1,11 @@
 import mongoose from "mongoose";
+const passportLocalMongoose = require('passport-local-mongoose');
 
 const userSchema = new mongoose.Schema({
   email: {
     type: String,
     required: [true, "Please add an email address"],
     unique: true,
-  },
-  password: {
-    type: String,
-    required: true,
   },
   verified: {
     type: Boolean,
@@ -28,6 +25,8 @@ const userSchema = new mongoose.Schema({
     type: String,
   },
 });
+
+userSchema.plugin(passportLocalMongoose,  { usernameField : 'email' });
 
 //Reset password expires after 30 minutes
 userSchema.methods.resetPasswordExpired = function () {
