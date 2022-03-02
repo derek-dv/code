@@ -54,9 +54,8 @@ dbConnect();
     }
 
     res.status(401).json({
-      error: `User with email ${email}`,
+      error: `User with email ${email} exists`,
     });
-    res.json({ hello: "world" });
   });
 
 export default handler;
