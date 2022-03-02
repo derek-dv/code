@@ -1,37 +1,23 @@
 import jwt from "jsonwebtoken";
 import dbConnect from "../../../utils/dbconnect";
-import handler from "../../../middleware/auth";
 const File = require("../../../model/File");
 
 dbConnect();
-handler
-  .get(async (req, res) => {
-    const files = await File.find({});
-    res.status(200).json({ files });
-  })
-  .post(async (req, res) => {
-    try {
-      const authorization = req.headers.authorization;
-      const token = authorization.slice(7, authorization.length);
-      const user = jwt.verify(token, process.env.JWT_SECRET);
 
-      const fileSize = Number(Buffer.byteLength(code, "utf8")) / 1000;
-      const file = new File({
-        fileName: req.body.fileName,
-        language: req.body.language,
-        author_id: req.body.author_id,
-        code: req.body.code,
-        fileSize,
-      });
+async function Files(req, res) {
+  switch (req.method) {
+    case "GET":
+      const files = await File.find({});
+      res.status(200).json({ files });
+      break;
 
-      const createdFile = await file.save();
-      res.status(201).send(createdFile);
-      return;
-    } catch (err) {
-      const { code } = req.body;
-      const fileSize = Number(Buffer.byteLength(code, "utf8")) / 1000;
-      console.log(fileSize);
-      if (fileSize < 200) {
+    case "POST":
+      try {
+        const authorization = req.headers.authorization;
+        const token = authorization.slice(7, authorization.length);
+        const user = jwt.verify(token, process.env.JWT_SECRET);
+
+        const fileSize = Number(Buffer.byteLength(code, "utf8")) / 1000;
         const file = new File({
           fileName: req.body.fileName,
           language: req.body.language,
@@ -42,10 +28,31 @@ handler
 
         const createdFile = await file.save();
         res.status(201).send(createdFile);
-      } else {
-        res.status(400).json({ error: "file larger than 200kb" });
-      }
-    }
-  });
+        return;
+      } catch (err) {
+        const { code } = req.body;
+        const fileSize = Number(Buffer.byteLength(code, "utf8")) / 1000;
+        console.log(fileSize);
+        if (fileSize < 200) {
+          const file = new File({
+            fileName: req.body.fileName,
+            language: req.body.language,
+            author_id: req.body.author_id,
+            code: req.body.code,
+            fileSize,
+          });
 
-export default handler;
+          const createdFile = await file.save();
+          res.status(201).send(createdFile);
+        } else {
+          res.status(400).json({ error: "file larger than 200kb" });
+        }
+      }
+      break;
+    default:
+      res.status(400).send("Method not supported");
+      break;
+  }
+}
+
+export default Files;

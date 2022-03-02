@@ -1,25 +1,58 @@
 const jwt = require("jsonwebtoken");
 import dbConnect from "../../../utils/dbconnect";
-import bcrypt from "bcrypt";
 import User from "../../../model/User";
-import handler from "../../../middleware/auth";
 
 dbConnect();
 
-handler.post(async (req, res) => {
-  const { password, oldPassword, email } = req.body;
-  const user = await User.findOne({ email });
-  console.log(req.header);
-  if (user) {
-    user.changePassword(oldPassword, password, (err, user) => {
-      if (err) {
-        console.log(err);
-        throw err;
-      }
-      console.log(user);
-    });
-  }
-  res.status(401).json({ error: "Invalid email or password" });
+import nc from "next-connect";
+import passport from "passport";
+import rateLimit from "express-rate-limit";
+
+const limiter = rateLimit({
+  windowMs: 5 * 60 * 1000, // 5 minutes
+  max: 20, // Limit each IP to 20 requests per `window` (here, per 5 minutes)
+  message: {
+    status: 429,
+    error: "You are doing that too much. Please try again in 10 minutes.",
+  },
+  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
 });
+
+const handler = nc({
+  onError: (err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).end("Something broke!");
+  },
+  onNoMatch: (req, res) => {
+    res.status(404).end("Page is not found");
+  },
+})
+  .use(
+    require("express-session")({
+      secret: "Miss white is my cat",
+      resave: false,
+      saveUninitialized: false,
+    })
+  )
+  .use(limiter)
+  .use(passport.initialize())
+  .use(passport.session())
+
+  .post(async (req, res) => {
+    const { password, oldPassword, email } = req.body;
+    const user = await User.findOne({ email });
+    console.log(req.header);
+    if (user) {
+      user.changePassword(oldPassword, password, (err, user) => {
+        if (err) {
+          console.log(err);
+          throw err;
+        }
+        console.log(user);
+      });
+    }
+    res.status(401).json({ error: "Invalid email or password" });
+  });
 
 export default handler;
