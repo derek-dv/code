@@ -44,15 +44,18 @@ const handler = nc({
     const user = await User.findOne({ email });
     console.log(req.header);
     if (user) {
-      user.changePassword(oldPassword, password, (err, user) => {
+      user.changePassword(oldPassword, password, (err, modUser) => {
         if (err) {
           console.log(err);
+          res.status(401).json({ error: "Old password is incorrect" });
           throw err;
+        } else {
+          modUser.save();
+          console.log(modUser);
+          return;
         }
-        console.log(user);
       });
-    }
-    res.status(401).json({ error: "Invalid email or password" });
+    } else res.status(401).json({ error: "Email not found" });
   });
 
 export default handler;
