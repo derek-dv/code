@@ -15,7 +15,7 @@ export default async function (req, res) {
         const updated = await User.findOneAndUpdate(
           { email },
           {
-            verifyToken: userToken,
+            emailVerificationToken: userToken,
             verifyTokenCreateDate: Date.now(),
           },
           { new: true }

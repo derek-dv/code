@@ -7,11 +7,10 @@ const userSchema = new mongoose.Schema({
     required: [true, "Please add an email address"],
     unique: true,
   },
-  verified: {
+  emailVerified: {
     type: Boolean,
-    required: true,
   },
-  verifyToken: {
+  emailVerificationToken: {
     type: String,
   },
   verifyTokenCreateDate: {
@@ -21,12 +20,12 @@ const userSchema = new mongoose.Schema({
   resetPasswordCreateDate: {
     type: Date,
   },
-  resetPasswordToken: {
+  passwordResetToken: {
     type: String,
   },
 });
 
-userSchema.plugin(passportLocalMongoose,  { usernameField : 'email' });
+userSchema.plugin(passportLocalMongoose,  { usernameField : 'email', limitAttempts: true });
 
 //Reset password expires after 30 minutes
 userSchema.methods.resetPasswordExpired = function () {

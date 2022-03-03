@@ -10,14 +10,14 @@ export default async function (req, res) {
   switch (req.method) {
     case "POST":
       const { email } = req.body;
-      let user = await User.findOne({ verifyToken: token });
+      let user = await User.findOne({ emailVerificationToken: token });
       if (user) {
         console.log(req.body);
         const modifiedUser = await User.findOneAndUpdate(
-          { verifyToken: token },
+          { emailVerificationToken: token },
           {
             email,
-            verified: false,
+            emailVerified: false,
           },
           {
             new: true,
@@ -31,7 +31,7 @@ export default async function (req, res) {
       break;
 
     case "GET":
-      let users = await User.findOne({ verifyToken: token });
+      let users = await User.findOne({ emailVerificationToken: token });
       console.log(token);
       console.log(users);
       if (users) {

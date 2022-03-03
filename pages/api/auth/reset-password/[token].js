@@ -41,7 +41,7 @@ const handler = nc({
   .post(async (req, res) => {
     const token = req.query.token;
     const { newPassword } = req.body;
-    let user = await User.findOne({ resetPasswordToken: token });
+    let user = await User.findOne({ passwordResetToken: token });
     if (user && !user.resetPasswordExpired()) {
       console.log(req.body);
       user.setPassword(newPassword, (err, newUser) => {
@@ -54,7 +54,7 @@ const handler = nc({
   })
   .get(async (req, res) => {
     const token = req.query.token;
-    let users = await User.findOne({ resetPasswordToken: token });
+    let users = await User.findOne({ passwordResetToken: token });
     console.log(token);
     console.log(users);
     if (users) {

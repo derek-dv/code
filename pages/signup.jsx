@@ -51,7 +51,7 @@ const Signup = ({ setAlert }) => {
         .then((res) => {
           console.log(res.data);
           setAlert(
-            `Verification link: works.codemash.me/verify-token/${res.data.verifyToken}`
+            `Verification link: works.codemash.me/verify-token/${res.data.emailVerificationToken}`
           );
           router.push("/emailVerify");
           // setTimeout(() => {

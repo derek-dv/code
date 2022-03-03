@@ -1,4 +1,3 @@
-import bcrypt from "bcrypt";
 import crypto from "crypto";
 import dbConnect, { transporter } from "../../../../utils/dbconnect";
 import User from "../../../../model/User";
@@ -10,18 +9,18 @@ export default async function (req, res) {
   switch (req.method) {
     case "POST":
       const { email } = req.body;
-      const resetPasswordToken = crypto.randomBytes(16).toString("hex");
+      const passwordResetToken = crypto.randomBytes(16).toString("hex");
       const user = await User.findOne({ email });
       if (user) {
         let modifiedUser = await User.findOneAndUpdate(
           { email },
           {
-            resetPasswordToken,
+            passwordResetToken,
             resetPasswordCreateDate: Date.now(),
           },
           { new: true }
         );
-        console.log(resetPasswordToken)
+        console.log(passwordResetToken)
 
         const mailOptions = {
           to: email,
@@ -30,7 +29,7 @@ export default async function (req, res) {
           html: `<h1>Reset password</h1>
                   <p>You have made a request to reset password.
                   Please click the link below to do so.</p>
-                  <a href="http://code-a.herokuapp.com/reset-password/${resetPasswordToken}">Reset password</a>`,
+                  <a href="http://code-a.herokuapp.com/reset-password/${passwordResetToken}">Reset password</a>`,
         };
         transporter.sendMail(mailOptions, (err, data) => {
           if (err) {

@@ -52,14 +52,14 @@ const handler = nc({
         const createdUser = await User.register(
           new User({
             email,
-            verified: false,
-            verifyToken: userToken,
+            emailVerified: false,
+            emailVerificationToken: userToken,
           }),
           password
         );
 
         console.log(
-          `http://localhost:3000/verify-token/${createdUser.verifyToken}`
+          `http://localhost:3000/verify-token/${createdUser.emailVerificationToken}`
         );
 
         const mailOptions = {
@@ -69,7 +69,7 @@ const handler = nc({
           html: `<h1>Email Verification</h1>
                   <p>You have successfully created an account with this Email
                   Please click the link below to verify the account</p>
-                  <a href="http://works.codemash.me/verify-token/${createdUser.verifyToken}">Verify Token</a>`,
+                  <a href="http://works.codemash.me/verify-token/${createdUser.emailVerificationToken}">Verify Token</a>`,
         };
 
         transporter.sendMail(mailOptions, (err, data) => {
@@ -80,7 +80,7 @@ const handler = nc({
         res.status(201).json({
           user_id: createdUser._id,
           email: createdUser.email,
-          verifyToken: createdUser.verifyToken,
+          emailVerificationToken: createdUser.emailVerificationToken,
         });
         return;
       }
