@@ -45,14 +45,14 @@ const handler = nc({
     console.log(req.header);
     if (user) {
       user.changePassword(oldPassword, password, (err, modUser) => {
-        if (err) {
-          console.log(err);
-          res.status(401).json({ error: "Old password is incorrect" });
-          throw err;
-        } else {
+        if (modUser) {
           modUser.save();
           console.log(modUser);
+          res.json({ success: "Passowrd successfully changed" });
           return;
+        } else {
+          console.log(err);
+          res.status(401).json({ error: "Old password is incorrect" });
         }
       });
     } else res.status(401).json({ error: "Email not found" });
