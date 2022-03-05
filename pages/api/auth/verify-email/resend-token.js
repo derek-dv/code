@@ -1,4 +1,3 @@
-import bcrypt from "bcrypt";
 import crypto from "crypto";
 import dbConnect, { transporter } from "../../../../utils/dbconnect";
 import User from "../../../../model/User";
