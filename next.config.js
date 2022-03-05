@@ -4,7 +4,7 @@ module.exports = {
     ignoreDuringBuilds: true,
   },
   i18n: {
-    locales: ["en", "fr", "es", "pt", "hi"],
+    locales: ["en", "es", "pt", "hi"],
     defaultLocale: "en",
   },
 };
