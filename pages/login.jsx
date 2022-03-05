@@ -1,11 +1,4 @@
-import {
-  FormControl,
-  TextField,
-  InputLabel,
-  Container,
-  Paper,
-  Button,
-} from "@material-ui/core";
+import { Container, Paper, Button } from "@material-ui/core";
 import Loader from "react-loader-spinner";
 import { useState } from "react";
 import Link from "next/link";
@@ -15,10 +8,18 @@ import { useRouter } from "next/router";
 import Heading from "../components/UI/Heading";
 import Alert from "../components/alert";
 import Input from "../components/formInput";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
+
+export async function getStaticProps({ locale }) {
+  return {
+    props: { ...(await serverSideTranslations(locale, ["login", "signup"])) },
+  };
+}
 
 const Login = ({ setAlert, setUser, user }) => {
+  const { t } = useTranslation();
   const router = useRouter();
-  const [errors, setErrors] = useState({});
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -30,51 +31,31 @@ const Login = ({ setAlert, setUser, user }) => {
 
   const submit = (e) => {
     e.preventDefault();
+
+    if (isError) return;
     setLoading(true);
-
-    let error = {};
-
-    let isError = false;
-    if (email.length < 1) {
-      error.email = "Email is required";
-      isError = true;
-    }
-
-    if (password.length < 8) {
-      error.password = "Password length must be at least 8";
-      isError = true;
-    }
-    setErrors(error);
-    const data = {
-      email,
-      password,
-    };
-    console.log(!isError);
-    if (!isError) {
-      // setLoading(true);
-      axios
-        .post("/api/auth/login", data)
-        .then((res) => {
-          setLoading(false);
-          localStorage.setItem("user", JSON.stringify(res.data));
-          localStorage.removeItem("guestId");
-          setAlert(`Logged in as ${res.data.email}`);
-          setUser(res.data);
-          router.push("/");
-          setTimeout(() => {
-            setAlert(null);
-          }, 5000);
-        })
-        .catch((err) => {
-          setLoading(false);
-          setPassword("");
-          setLoading(false);
-          if (err.response.data.error) setLoginError(err.response.data.error);
-        });
-      setLoading(false);
-    } else {
-      setLoading(false);
-    }
+    axios
+      .post("/api/auth/login", data)
+      .then((res) => {
+        setLoading(false);
+        localStorage.setItem("user", JSON.stringify(res.data));
+        localStorage.removeItem("guestId");
+        setAlert(`Logged in as ${res.data.email}`);
+        setUser(res.data);
+        router.push("/");
+        setTimeout(() => {
+          setAlert(null);
+        }, 5000);
+      })
+      .catch((err) => {
+        setLoading(false);
+        setPassword("");
+        setLoading(false);
+        if (err.response.data.error) setLoginError(err.response.data.error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
   return (
     <Container>
@@ -85,20 +66,18 @@ const Login = ({ setAlert, setUser, user }) => {
         {loginError ? <Alert variant="error" text={loginError} /> : null}
         {loading ? "loading" : ""}
         <Paper className="p-4 pt-0 w-full lg:w-96">
-          <Heading type="sectionHeading">Login</Heading>
+          <Heading type="sectionHeading">{t('login:login')}</Heading>
           <form onSubmit={submit} autoComplete="off">
             <div className="w-full mt-3">
               <Input
-                label="Email"
-                error={errors.email ? errors.email : null}
+                label={t('login:email')}
                 setValue={setEmail}
                 type="email"
               />
             </div>
             <div className="w-full mt-3 mb-3">
               <Input
-                label="Password"
-                error={errors.password ? errors.password : null}
+                label={t('login:password')}
                 setValue={setPassword}
                 type="password"
               />
@@ -111,7 +90,7 @@ const Login = ({ setAlert, setUser, user }) => {
                 disabled
                 startIcon={<Loader type="Oval" height={20} width={20} />}
               >
-                Login
+                {t('login:login')}
               </Button>
             ) : (
               <Button
@@ -119,19 +98,19 @@ const Login = ({ setAlert, setUser, user }) => {
                 className="text-white text-bold"
                 type="submit"
               >
-                Login
+                {t('login:login')}
               </Button>
             )}
           </form>
         </Paper>
         <p className="mt-2 text-sm text-gray-500 text-left">
-          Don't have an account?{"  "}
+        {t('login:account')}{"  "}
           <Link href="/signup">
-            <a className="text-blue-400 underline">Signup</a>
+            <a className="text-blue-400 underline">{t('signup:signup')}</a>
           </Link>
         </p>
         <Link href="/reset-password">
-          <a className="text-blue-400">Forgot password</a>
+          <a className="text-blue-400">{t('login:forgot')}</a>
         </Link>
       </div>
     </Container>

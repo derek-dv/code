@@ -7,6 +7,14 @@ import { useState } from "react";
 import Heading from "../../components/UI/Heading";
 import Editor from "@monaco-editor/react";
 import dynamic from "next/dynamic";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
+
+export async function getStaticProps({ locale }) {
+  return {
+    props: { ...(await serverSideTranslations(locale, ["new", "common"])) },
+  };
+}
 
 const GoogleImport = dynamic(() => import("../../components/googleImport"), {
   ssr: false,
@@ -20,6 +28,7 @@ const OneDriveImport = dynamic(
 );
 
 const NewFile = ({ user, setAlert }) => {
+  const {t} = useTranslation();
   const router = useRouter();
   const [fileName, setFileName] = useState("");
   const [language, setLanguage] = useState("javascript");
@@ -75,7 +84,7 @@ const NewFile = ({ user, setAlert }) => {
       <Container>
         <div className="py-6">
           <Heading className="mb-6" type="mainHeading">
-            New File
+            {t("new:new")}
           </Heading>
           <div className="mb-2">
             <form onSubmit={handleSubmit}>
@@ -96,7 +105,7 @@ const NewFile = ({ user, setAlert }) => {
                 value={fileName}
                 onChange={(e) => setFileName(e.target.value)}
                 style={{ marginLeft: "2rem" }}
-                placeholder="File name"
+                placeholder={t("new:file")}
               />
               <Button
                 type="submit"
@@ -106,7 +115,7 @@ const NewFile = ({ user, setAlert }) => {
                   marginLeft: "0.5rem",
                 }}
               >
-                Save
+                {t("new:save")}
               </Button>
             </form>
           </div>
@@ -118,7 +127,7 @@ const NewFile = ({ user, setAlert }) => {
             value={code}
             onChange={handleEditorChange}
           />
-          <div className="mt-5">
+          <div className="mt-5 flex">
             <GoogleImport
               setCode={setCode}
               setName={setFileName}

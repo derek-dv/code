@@ -31,17 +31,12 @@ export default function Footer() {
                   English
                 </Link>
               </MenuItem>
-              <MenuItem value="french">
-                <Link href="#" locale={"fr"}>
-                  French
-                </Link>
-              </MenuItem>
-              <MenuItem value="cpp">
+              <MenuItem value="spanish">
                 <Link href="#" locale={"es"}>
                   Spanish
                 </Link>
               </MenuItem>
-              <MenuItem value="html">
+              <MenuItem value="hindi">
                 <Link href="#" locale={"hi"}>
                   Hindi
                 </Link>
