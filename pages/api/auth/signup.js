@@ -71,12 +71,31 @@ const handler = nc({
                   Please click the link below to verify the account</p>
                   <a href="http://works.codemash.me/verify-token/${createdUser.emailVerificationToken}">Verify Token</a>`,
         };
+        // await new Promise((resolve, reject) => {
+        //   // send mail
+        //   transporter.sendMail(mailOptions, (err, info) => {
+        //       if (err) {
+        //           console.error(err);
+        //           reject(err);
+        //       } else {
+        //           console.log(info);
+        //           resolve(info);
+        //       }
+        //   })
+        // }
 
-        transporter.sendMail(mailOptions, (err, data) => {
-          if (err) {
-            console.log(err);
-          }
+        await new Promise((resolve, reject) => {
+          transporter.sendMail(mailOptions, (err, info) => {
+            if (err) {
+              console.error(err);
+              reject(err);
+            } else {
+              console.log(info);
+              resolve(info);
+            }
+          });
         });
+
         res.status(201).json({
           user_id: createdUser._id,
           email: createdUser.email,
