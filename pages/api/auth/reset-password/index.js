@@ -20,7 +20,7 @@ export default async function (req, res) {
           },
           { new: true }
         );
-        console.log(passwordResetToken)
+        console.log(`${process.env.DOMAIN}/${passwordResetToken}`)
 
         const mailOptions = {
           to: email,

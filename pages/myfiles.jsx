@@ -30,6 +30,7 @@ const Files = ({ user }) => {
       author_id = localStorage.getItem("guestId");
       setAuthorId(author_id);
     }
+    console.log(process.env.NEXT_PUBLIC_MICROSOFT_APP_ID)
 
     console.log(author_id);
     axios
@@ -38,9 +39,9 @@ const Files = ({ user }) => {
         const ser = res.data.files;
         console.log(ser);
         setFiles(ser);
-        setRows(ser);
         setLoading(false);
         console.log(user);
+        console.log('2' + process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID)
       })
       .catch((error) => {
         console.log(error);
