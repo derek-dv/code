@@ -59,7 +59,7 @@ const handler = nc({
         );
 
         console.log(
-          `http://localhost:3000/verify-token/${createdUser.emailVerificationToken}`
+          `${process.env.DOMAIN}/verify-token/${createdUser.emailVerificationToken}`
         );
 
         const mailOptions = {
@@ -69,37 +69,20 @@ const handler = nc({
           html: `<h1>Email Verification</h1>
                   <p>You have successfully created an account with this Email
                   Please click the link below to verify the account</p>
-                  <a href="http://works.codemash.me/verify-token/${createdUser.emailVerificationToken}">Verify Token</a>`,
+                  <a href="${process.env.DOMAIN}/verify-token/${createdUser.emailVerificationToken}">Verify Token</a>`,
         };
-        // await new Promise((resolve, reject) => {
-        //   // send mail
-        //   transporter.sendMail(mailOptions, (err, info) => {
-        //       if (err) {
-        //           console.error(err);
-        //           reject(err);
-        //       } else {
-        //           console.log(info);
-        //           resolve(info);
-        //       }
-        //   })
-        // }
 
-        await new Promise((resolve, reject) => {
           transporter.sendMail(mailOptions, (err, info) => {
             if (err) {
               console.error(err);
-              reject(err);
             } else {
               console.log(info);
-              resolve(info);
             }
           });
-        });
 
         res.status(201).json({
           user_id: createdUser._id,
           email: createdUser.email,
-          emailVerificationToken: createdUser.emailVerificationToken,
         });
         return;
       }

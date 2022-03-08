@@ -8,13 +8,14 @@ export default async function (req, res) {
   switch (req.method) {
     case "GET":
       try {
-        const user = await User.findOne({ verifyToken: token });
+        const user = await User.findOne({ emailVerificationToken: token });
         console.log(token);
         console.log(user);
         if (user) {
           const updated = await User.findOneAndUpdate(
-            { verifyToken: token },
-            { verified: true }
+            { emailVerificationToken: token },
+            { emailVerified: true },
+            {new: true}
           );
           updated.save();
           res.json(updated);

@@ -1,9 +1,11 @@
 import { Container, Button, Paper, Modal } from "@material-ui/core";
-import { useEffect, useState } from "react";
+import { useEffect, useState } from "react"
+import Loader from "react-loader-spinner";;
 import { useRouter } from "next/router";
 import axios from "axios";
 import CustomInput from "../components/formInput";
 import Heading from "../components/UI/Heading";
+import Alert from "../components/alert";
 import Input from "../components/formInput";
 
 export default function ({ setAlert, user, setUser}) {
@@ -12,6 +14,7 @@ export default function ({ setAlert, user, setUser}) {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(true);
+  const [passwordError, setPasswordError] = useState(null);
   const [files, setFiles] = useState();
   const [email, setEmail] = useState();
   const [changeEmail, setChange] = useState(false);
@@ -28,12 +31,13 @@ export default function ({ setAlert, user, setUser}) {
     width: "60%",
     border: "2px solid black",
     padding: "4rem",
-    height: "18rem",
+    minHeight: "18rem",
     backgroundColor: "#eee",
   };
 
   useEffect(() => {
     if (user) {
+      setLoading(true)
       axios
         .get(`/api/files/author/${user.user_id}`)
         .then((res) => {
@@ -44,6 +48,8 @@ export default function ({ setAlert, user, setUser}) {
         .catch((err) => {
           console.log(err.response);
           setError(true);
+        }).finally(()=>{
+          setLoading(false)
         });
     }
   }, [user]);
@@ -53,10 +59,12 @@ export default function ({ setAlert, user, setUser}) {
       .post(`/api/auth/change-password`, { email: user.email, password, oldPassword })
       .then((res) => {
         console.log(res.data);
-        setAlert("Your password hs been changed");
+        setOpen(false)
+        setAlert("Your password has been changed");
       })
       .catch((err) => {
         console.log(err);
+        setPasswordError(err.response.data.error)
       });
   };
 
@@ -68,7 +76,7 @@ export default function ({ setAlert, user, setUser}) {
       })
       .then((res) => {
         console.log(res.data);
-        setAlert("Email successfully changed!");
+        router.push('/emailVerify')
       })
       .catch((err) => {
         console.log(err);
@@ -97,7 +105,7 @@ export default function ({ setAlert, user, setUser}) {
 
   return (
     <Container className="mt-5">
-      {user && !error ? (
+    {loading ? <Loader type="Oval"/> : user && !error ? (
         <>
           <Modal
             open={open}
@@ -105,12 +113,12 @@ export default function ({ setAlert, user, setUser}) {
             aria-labelledby="modal-modal-title"
             aria-describedby="modal-modal-description"
           >
-            <div style={style}>
+            <div style={style}>{passwordError ? <Alert variant="error" text={passwordError} /> : null}
               <Heading type="sectionHeading" className="text-center">
                 Change Password
               </Heading>
               <form>
-                <div className="mt-2 mb-3">
+                <div className="mb-3">
                   <Input
                     type="password"
                     label="Old Password"
@@ -223,6 +231,7 @@ export default function ({ setAlert, user, setUser}) {
       ) : (
         <p></p>
       )}
+      
     </Container>
   );
 }

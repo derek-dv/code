@@ -13,8 +13,8 @@ export default function Logout({ setUser }) {
   }, []);
   return (
     <Container>
-      <Heading type="mainHeading">Logged out</Heading>
-      <p>You are now logged out</p>
+      <Heading className="mt-2" type="mainHeading">Logged out</Heading>
+      <p className="mt-2">You are now logged out</p>
       <Link href="/">
         <a className="text-blue-400 hover:text-blue-600">Go to Home</a>
       </Link>

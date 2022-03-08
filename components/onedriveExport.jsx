@@ -5,11 +5,11 @@ import { useState } from "react";
 import { PublicClientApplication } from "@azure/msal-browser";
 
 const ms_graph = "https://graph.microsoft.com/v1.0";
-const APP_ID = "8d22d168-17c6-49f9-8118-57c7d5aa2a5d";
-const REDIRECT_URI = "https://code-a.herokuapp.com";
+const APP_ID = process.env.REACT_APP_MICROSOFT_APP_ID;
+const REDIRECT_URI = process.env.REACT_APP_MICROSOFT_REDIRECT_URI;
 const SCOPES = ["Files.ReadWrite"];
 
-export default function ({ code, name, setAlert }) {
+export default function ({ text, code, name, setAlert }) {
   const [user, setUser] = useState();
   const [open, setOpen] = useState();
   const [accessToken, setAccessToken] = useState();
@@ -37,10 +37,16 @@ export default function ({ code, name, setAlert }) {
       },
     });
 
+    try{
+
     await publicClient.loginPopup({
       scopes: SCOPES,
       prompt: "select_account",
     });
+  }
+    catch(err) {
+      console.error(err)
+    }
 
     const account = publicClient.getAllAccounts()[0];
 
@@ -119,9 +125,10 @@ export default function ({ code, name, setAlert }) {
         }}
         style={{
           backgroundColor: "blue",
+          color: "white"
         }}
       >
-        Export to Microsoft Drive
+        {text}
       </Button>
     </>
   );

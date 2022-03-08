@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { Container, Input, Button, Select, MenuItem } from "@material-ui/core";
 import { useState, useEffect } from "react";
 // Components
+import Alert from "../../components/alert"
 import Heading from "../../components/UI/Heading";
 const GoogleExport = dynamic(() => import("../../components/googleExport"), {
   ssr: false,
@@ -14,7 +15,9 @@ const OneDriveExport = dynamic(
   {
     ssr: false,
   }
-);
+)
+import languages from "../../utils/monaco-languages"
+
 
 import Editor from "@monaco-editor/react";
 
@@ -23,9 +26,10 @@ const NewFile = ({ user, setAlert }) => {
   const router = useRouter();
   const fileId = query.fileId || null;
   const [code, setCode] = useState("");
-  const [language, setLanguage] = useState("javascript");
+  const [language, setLanguage] = useState("bat");
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState();
   const [isAuthor, setAuthor] = useState(false);
   const [authorId, setAuthorId] = useState();
 
@@ -78,6 +82,8 @@ const NewFile = ({ user, setAlert }) => {
     axios.post("/api/files", data).then((res) => {
       console.log(res.data);
       router.push("/myfiles");
+    }).catch((err)=>{
+      setError("You must input text in the editor and add file name!")
     });
   };
   const handlePut = (e) => {
@@ -98,6 +104,7 @@ const NewFile = ({ user, setAlert }) => {
       })
       .catch((err) => {
         console.error(err);
+        setError("You must input text in the editor and add file name!")
       });
   };
   return (
@@ -107,7 +114,7 @@ const NewFile = ({ user, setAlert }) => {
           {isAuthor ? "Editing " : "Viewing "} file | Code Sharing Application
         </title>
       </Head>
-      <Container>
+      <Container>{error ? <Alert variant="error" text={error}/> : null}
         <div className="py-6">
           <Heading className="mb-6" type="sectionHeading">
             {isAuthor ? "Editing " : "Viewing "}file
@@ -119,13 +126,9 @@ const NewFile = ({ user, setAlert }) => {
               label="Language"
               onChange={(e) => setLanguage(e.target.value)}
             >
-              <MenuItem value="python">Python</MenuItem>
-              <MenuItem value="javascript">JavaScript</MenuItem>
-              <MenuItem value="cpp">C++</MenuItem>
-              <MenuItem value="java">Java</MenuItem>
-              <MenuItem value="html">HTML</MenuItem>
-              <MenuItem value="css">CSS</MenuItem>
-              <MenuItem value="markdown">Markdown</MenuItem>
+              {languages.map((lang)=>
+                  <MenuItem key={lang.id} value={lang.id}>{lang.language}</MenuItem>
+              )}
             </Select>
             {isAuthor ? (
               <>
@@ -177,9 +180,9 @@ const NewFile = ({ user, setAlert }) => {
               value={code}
               onChange={handleEditorChange}
             />
-            <div className="">
-              <GoogleExport code={code} name={name} setAlert={setAlert} />
-              <OneDriveExport code={code} name={name} setAlert={setAlert} />
+            <div className="flex">
+              <GoogleExport text="Export to Google drive" code={code} name={name} setAlert={setAlert} />
+              <OneDriveExport text="Export to Microsoft drive" code={code} name={name} setAlert={setAlert} />
             </div>
           </div>
         </div>

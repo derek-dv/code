@@ -1,3 +1,4 @@
+import jwt from "jsonwebtoken";
 import dbConnect from "../../../utils/dbconnect";
 import File from "../../../model/File";
 
@@ -47,18 +48,41 @@ const handler = nc({
   })
   .put(async (req, res) => {
     const id = req.query.fileId;
+
     try {
+      const authorization = req.headers.authorization;
+      const token = authorization.slice(7, authorization.length);
+      const user = jwt.verify(token, process.env.JWT_SECRET);
+      const fileSize = Number(Buffer.byteLength(req.body.code, "utf8")) / 1000;
       const temp = await File.findOne({ _id: id });
       const file = await File.findOneAndUpdate(
         { _id: id },
         {
           fileName: req.body.fileName ? req.body.fileName : temp.fileName,
           code: req.body.code ? req.body.code : temp.code,
+          fileSize
         }
       );
       file.save();
       res.send(file);
     } catch (err) {
+      const fileSize = Number(Buffer.byteLength(req.body.code, "utf8")) / 1000;
+      if (fileSize < 200) {
+        const temp = await File.findOne({ _id: id });
+      const file = await File.findOneAndUpdate(
+        { _id: id },
+        {
+          fileName: req.body.fileName ? req.body.fileName : temp.fileName,
+          code: req.body.code ? req.body.code : temp.code,
+          fileSize
+        }
+      );
+      file.save();
+      res.send(file);
+      }
+      else {
+        res.status(403).json({error: "Please login to upload large files"})
+      }
       console.log(err);
     }
   })

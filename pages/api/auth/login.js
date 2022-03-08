@@ -46,7 +46,7 @@ handler.post(async (req, res) => {
     User.authenticate()(email, password, function (err, user) {
       if (user) {
         const token = generateToken(user);
-        res.json({ user_id: user._id, email: user.email, jwtToken: token });
+        res.json({ user_id: user._id, email: user.email, jwtToken: token, verified: user.emailVerified });
         return;
       } else {
         console.log(err);

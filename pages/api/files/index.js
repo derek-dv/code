@@ -46,7 +46,7 @@ const handler = nc({
       const token = authorization.slice(7, authorization.length);
       const user = jwt.verify(token, process.env.JWT_SECRET);
 
-      const fileSize = Number(Buffer.byteLength(code, "utf8")) / 1000;
+      const fileSize = Number(Buffer.byteLength(req.body.code, "utf8")) / 1000;
       const file = new File({
         fileName: req.body.fileName,
         language: req.body.language,

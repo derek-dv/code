@@ -32,7 +32,8 @@ const Login = ({ setAlert, setUser, user }) => {
   const submit = (e) => {
     e.preventDefault();
 
-    if (isError) return;
+    const data = {email, password}
+
     setLoading(true);
     axios
       .post("/api/auth/login", data)
@@ -64,7 +65,6 @@ const Login = ({ setAlert, setUser, user }) => {
         className="flex items-center justify-center flex-col"
       >
         {loginError ? <Alert variant="error" text={loginError} /> : null}
-        {loading ? "loading" : ""}
         <Paper className="p-4 pt-0 w-full lg:w-96">
           <Heading type="sectionHeading">{t('login:login')}</Heading>
           <form onSubmit={submit} autoComplete="off">
@@ -94,7 +94,7 @@ const Login = ({ setAlert, setUser, user }) => {
               </Button>
             ) : (
               <Button
-                style={{ backgroundColor: "blue", padding: "0.5rem 1rem" }}
+                style={{ color: "white", backgroundColor: "blue", padding: "0.5rem 1rem" }}
                 className="text-white text-bold"
                 type="submit"
               >

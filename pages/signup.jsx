@@ -100,7 +100,7 @@ const Signup = () => {
             </div>
             {loading ? (
               <Button
-                style={{ backgroundColor: "blue", color: "white", padding: "0.5rem 1rem" }}
+                style={{ backgroundColor: "blue", color: "gray", padding: "0.5rem 1rem" }}
                 className="text-white text-bold"
                 type="submit"
                 disabled
@@ -110,7 +110,7 @@ const Signup = () => {
               </Button>
             ) : (
               <Button
-                style={{ backgroundColor: "blue", color: "gray", padding: "0.5rem 1rem" }}
+                style={{ backgroundColor: "blue", color: "white", padding: "0.5rem 1rem" }}
                 className="text-white text-bold"
                 type="submit"
               >

@@ -11,7 +11,7 @@ const DISCOVERY_DOCS = [
 // included, separated by spaces.
 const SCOPES = "https://www.googleapis.com/auth/drive";
 
-export default function ({ setCode, setName, setAlert }) {
+export default function ({ setCode, setName, setAlert, text }) {
   const [listDocumentsVisible, setListDocumentsVisibility] = useState(false);
   const [documents, setDocuments] = useState([]);
   const [isLoadingGoogleDriveApi, setIsLoadingGoogleDriveApi] = useState(false);
@@ -82,9 +82,9 @@ export default function ({ setCode, setName, setAlert }) {
     setIsLoadingGoogleDriveApi(true);
     gapi.client
       .init({
-        apiKey: "AIzaSyAGyvwdhhfl7k6opOpchwN21m8q-HR-_04",
+        apiKey: process.env.REACT_APP_GOOGLE_API_KEY,
         clientId:
-          "393198555287-p33dq0utiaf9kpc32il9stvnkefhv42j.apps.googleusercontent.com",
+          process.env.REACT_APP_GOOGLE_CLIENT_ID,
         discoveryDocs: DISCOVERY_DOCS,
         scope: SCOPES,
       })
@@ -121,10 +121,11 @@ export default function ({ setCode, setName, setAlert }) {
         style={{
           backgroundColor: "red",
           marginRight: "2rem",
+          color: "white"
         }}
         onClick={() => handleClientLoad()}
       >
-        import from Google Drive
+        {text}
       </Button>
     </>
   );

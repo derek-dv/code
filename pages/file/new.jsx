@@ -9,6 +9,8 @@ import Editor from "@monaco-editor/react";
 import dynamic from "next/dynamic";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
+import languages from "../../utils/monaco-languages"
+import Alert from "../../components/alert"
 
 export async function getStaticProps({ locale }) {
   return {
@@ -31,8 +33,9 @@ const NewFile = ({ user, setAlert }) => {
   const {t} = useTranslation();
   const router = useRouter();
   const [fileName, setFileName] = useState("");
-  const [language, setLanguage] = useState("javascript");
+  const [language, setLanguage] = useState("bat");
   const [code, setCode] = useState("");
+  const [error, setError] = useState();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -63,11 +66,15 @@ const NewFile = ({ user, setAlert }) => {
         Authorization: `Bearer ${jwtToken}`,
       },
     };
+    setError(null)
 
     console.log(jwtToken);
     axios.post("/api/files", data, config).then((res) => {
       console.log(res.data);
       router.push("/myfiles");
+    }).catch((err)=>{
+      console.log(err)
+      setError("You must input code in the editor and add a file name!")
     });
   };
 
@@ -81,7 +88,7 @@ const NewFile = ({ user, setAlert }) => {
       <Head>
         <title>New File | Code Sharing Application</title>
       </Head>
-      <Container>
+      <Container>{error ? <Alert variant="error" text={error}/> : null}
         <div className="py-6">
           <Heading className="mb-6" type="mainHeading">
             {t("new:new")}
@@ -92,14 +99,10 @@ const NewFile = ({ user, setAlert }) => {
                 value={language}
                 label="Language"
                 onChange={(e) => setLanguage(e.target.value)}
-              >
-                <MenuItem value="python">Python</MenuItem>
-                <MenuItem value="javascript">JavaScript</MenuItem>
-                <MenuItem value="cpp">C++</MenuItem>
-                <MenuItem value="java">Java</MenuItem>
-                <MenuItem value="html">HTML</MenuItem>
-                <MenuItem value="css">CSS</MenuItem>
-                <MenuItem value="markdown">Markdown</MenuItem>
+              > 
+                {languages.map((lang)=>
+                  <MenuItem key={lang.id} value={lang.id}>{lang.language}</MenuItem>
+                )}
               </Select>
               <Input
                 value={fileName}
@@ -113,6 +116,7 @@ const NewFile = ({ user, setAlert }) => {
                   backgroundColor: "blue",
                   padding: "0.1rem 0.5rem",
                   marginLeft: "0.5rem",
+                  color: "white"
                 }}
               >
                 {t("new:save")}
@@ -132,11 +136,13 @@ const NewFile = ({ user, setAlert }) => {
               setCode={setCode}
               setName={setFileName}
               setAlert={setAlert}
+              text={"Import from Google Drive"}
             />
             <OneDriveImport
               setCode={setCode}
               setName={setFileName}
               setAlert={setAlert}
+              text={"Import from Microsoft Drive"}
             />
           </div>
         </div>

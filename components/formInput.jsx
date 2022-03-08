@@ -1,6 +1,6 @@
 import { FormControl, TextField } from "@material-ui/core";
 
-function Input({ type, label, setValue, error, required = false }) {
+function Input({ type, label, setValue, error, required = true }) {
   return (
     <FormControl fullWidth>
       <TextField

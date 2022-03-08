@@ -23,7 +23,7 @@ const style = {
   backgroundColor: "#eee",
 };
 
-export default function ({ code, name, setAlert }) {
+export default function ({ text, code, name, setAlert }) {
   const [open, setOpen] = useState(false);
   const [profile, setProfile] = useState({});
   const [signedInUser, setSignedInUser] = useState();
@@ -69,9 +69,9 @@ export default function ({ code, name, setAlert }) {
   const initClient = () => {
     gapi.client
       .init({
-        apiKey: "AIzaSyAGyvwdhhfl7k6opOpchwN21m8q-HR-_04",
+        apiKey: process.env.REACT_APP_GOOGLE_API_KEY,
         clientId:
-          "393198555287-p33dq0utiaf9kpc32il9stvnkefhv42j.apps.googleusercontent.com",
+          process.env.REACT_APP_GOOGLE_CLIENT_ID,
         discoveryDocs: DISCOVERY_DOCS,
         scope: SCOPES,
       })
@@ -194,7 +194,6 @@ export default function ({ code, name, setAlert }) {
                   "Content-Length": file.size,
                 })
               );
-              setAlert("File uploaded");
               setOpen(false);
             }}
           >
@@ -206,10 +205,11 @@ export default function ({ code, name, setAlert }) {
         style={{
           backgroundColor: "red",
           marginRight: "2rem",
+          color: "white"
         }}
         onClick={() => handleClientLoad()}
       >
-        Export to Google Drive
+        {text}
       </Button>
     </>
   );
