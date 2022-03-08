@@ -82,9 +82,9 @@ export default function ({ setCode, setName, setAlert, text }) {
     setIsLoadingGoogleDriveApi(true);
     gapi.client
       .init({
-        apiKey: process.env.REACT_APP_GOOGLE_API_KEY,
+        apiKey: "AIzaSyB94z5c_LzLmTF28VH261Eb7avAb4_guFE",
         clientId:
-          process.env.REACT_APP_GOOGLE_CLIENT_ID,
+          "968608582905-42e5jg30ds0dd2jnp2l4rtf77j5156qr.apps.googleusercontent.com",
         discoveryDocs: DISCOVERY_DOCS,
         scope: SCOPES,
       })

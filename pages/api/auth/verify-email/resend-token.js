@@ -27,15 +27,19 @@ export default async function (req, res) {
           html: `<h1>Email Verification</h1>
                   <p>You have made a request to resend the email Verification linkk.
                   Please click the link below to verify the account</p>
-                  <a href="http://code-a.herokuapp.com/verify-token/${userToken}">Verify Token</a>`,
+                  <a href="${process.env.DOMAIN}/${userToken}">Verify Token</a>`,
         };
         transporter.sendMail(mailOptions, (err, data) => {
           if (err) {
             console.log(err);
           }
+          else {
+            console.log(data)
+          }
         });
         console.log(updated);
         res.send({ updated });
+        return
       }
       console.log(email);
       res.status(404).json({ error: "user not found" });

@@ -29,7 +29,7 @@ export default async function (req, res) {
           html: `<h1>Reset password</h1>
                   <p>You have made a request to reset password.
                   Please click the link below to do so.</p>
-                  <a href="http://code-a.herokuapp.com/reset-password/${passwordResetToken}">Reset password</a>`,
+                  <a href="${process.env.DOMAIN}/${passwordResetToken}">Reset password</a>`,
         };
         transporter.sendMail(mailOptions, (err, data) => {
           if (err) {
@@ -40,6 +40,7 @@ export default async function (req, res) {
 
         modifiedUser.save();
         res.json({ modifiedUser });
+        return
       } else {
         res.status(404).json({ error: "User does not exist" });
       }

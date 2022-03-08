@@ -5,8 +5,8 @@ import { PublicClientApplication } from "@azure/msal-browser";
 import FileModal from "./oneDriveModal";
 
 const ms_graph = "https://graph.microsoft.com/v1.0";
-const APP_ID = process.env.REACT_APP_MICROSOFT_APP_ID;
-const REDIRECT_URI = process.env.REACT_APP_MICROSOFT_REDIRECT_URI;
+const APP_ID = "8d22d168-17c6-49f9-8118-57c7d5aa2a5d";
+const REDIRECT_URI = "https://vigorous-albattani-e77a5b.netlify.app";
 const SCOPES = ["Files.ReadWrite"];
 
 export default function ({ setCode, setName, setAlert, text }) {
